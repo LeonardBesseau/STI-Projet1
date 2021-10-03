@@ -1,46 +1,30 @@
-<?php include "../dbConnect.php";
+<?php
+
+include '../db_connect.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    //get user credentials
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $password = $_POST['pswd'];
 
-    $sql = $file_db->prepare("SELECT * FROM Person WHERE `email` = ?");
-    $sql->execute([$email]);
-    $result = $sql->fetch();
-
-    if (!empty($result) && $result['validity'] && $password == $result['password']) {
-        echo "youpi";
+    if (isset($file_db)) {
+        //query to fetch user
+        $sql = $file_db->prepare("SELECT * FROM users WHERE email = '$email' and password = '$password'");
+        $sql->execute();
+        $result = $sql->fetch();
+        //verify if the user is valid and activ
+        if (!empty($result) && $result['is_activ']) {
+            //create session and redirect to user inbox
+            session_start();
+            $_SESSION['email'] = $result['email'];
+            $_SESSION['is_admin'] = $result['is_admin'];
+            header('Location: ../view/inbox.php');
+        } else {
+            //redirect to login page
+            header('Location: ../view/login.php');
+        }
     } else {
-        echo "probleme";
+        echo 'Error: unable to connect to database';
     }
-
-    echo "User:" . $_POST['username'] . "<br/>";
-    echo $email . "<br/>";
-    /*
-        if ($email == $result['email'] && $password == $result['password']) {
-            // User exists
-            $numrows = $file_db->query('SELECT Count(*) FROM $result');
-            if ($numrows != 0) {
-            header('Location: helloworld.php');
-            echo "User exist";
-
-            } else {
-                 header('Location: authentication.php');
-                 echo "User doesn't exist";
-                 //die("That user doesn't exist!");
-             }
-
-
-        } else
-            echo "error";
-        //die("ERROR");
-
-
-    } else {
-        // $username = "";
-        // $password = "";
-    }
-    */
 }
-?>
