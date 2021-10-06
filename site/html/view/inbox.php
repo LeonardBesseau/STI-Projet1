@@ -24,6 +24,7 @@ if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
         $sql = $file_db->prepare("SELECT * FROM messages WHERE recipient = '$email' ORDER BY date DESC");
         $sql->execute();
         foreach ($sql->fetchAll() as $message) {
+            $id = $message['id']
             ?>
             <div class="message_container">
                 <div class="message">
@@ -36,8 +37,8 @@ if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
                     </div>
                     <div class="message_action">
                         <button class="button_open">Open</button>
-                        <button class="button_respond">Respond</button>
-                        <button class="button_delete">Delete</button>
+                        <button class="button_respond" >Respond</button>
+                        <button class="button_delete" onclick="window.location.href='../logic/delete_message.php?id=<?php echo $message['id'];?>'">Delete</button>
                     </div>
                 </div>
             </div>
