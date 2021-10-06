@@ -34,10 +34,11 @@ if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
                             <p class="subject">Subject: <?= $message['subject'] ?></p>
                             <p><?= $message['date'] ?></p>
                         </div>
+                        <p id="message_body"></p>
                     </div>
                     <div class="message_action">
-                        <button class="button_open">Open</button>
-                        <button class="button_respond" >Respond</button>
+                        <button class="button_open" onclick="document.getElementById('message_body').innerHTML = '<?php echo $message['body'];?>'">Open</button>
+                        <button class="button_respond" onclick="window.location.href='./open_message.php?id=<?php echo $message['id'];?>'">Respond</button>
                         <button class="button_delete" onclick="window.location.href='../logic/delete_message.php?id=<?php echo $message['id'];?>'">Delete</button>
                     </div>
                 </div>
@@ -47,7 +48,7 @@ if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
     }
     ?>
 
-
 </div>
+
 </body>
 </html>
