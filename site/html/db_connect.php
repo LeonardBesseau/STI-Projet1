@@ -33,7 +33,7 @@ try {
                     FOREIGN KEY(sender) REFERENCES User(email),
                     FOREIGN KEY(recipient) REFERENCES User(email))");
 
-} catch(PDOException $e) {
+} catch (PDOException $e) {
 
     echo "lol";
     // Close file database.sqlite connection

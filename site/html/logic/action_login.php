@@ -2,7 +2,7 @@
 
 include '../db_connect.php';
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //get user credentials
     $email = $_POST['email'];
