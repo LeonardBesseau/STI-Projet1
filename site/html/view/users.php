@@ -24,10 +24,12 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
 <body>
 <div class="container">
     <h2 class="title">User management</h2>
+    <a href="../logic/new_user.php" class="btn btn-dark">Add user</a>
     <table class="table">
         <thead>
         <tr>
             <th scope="col">Email</th>
+            <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -40,21 +42,22 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
             $sql = $file_db->prepare("SELECT * FROM users");
         }
         $sql->execute();
-        foreach ($sql->fetchAll() as $user) {
+        foreach ($sql->fetchAll() as $email) {
             ?>
             <tr>
-                <td><?=$user['email']?></td>
-                <td><?=$user['is_activ'] ? "active" : "inactive"?></td>
-                <td><?=$user['is_admin'] ? "admin" : "collaborator"?></td>
-                <td><a href="./user/modify_user.php?email=<?=$user['email']?>">Modify</a></td>
-                <td><a href="./user/delete_user.php?email=<?=$user['email']?>">Delete</a></td>
+                <td><?=$email['email']?></td>
+                <td><?=$email['is_activ'] ? "active" : "inactive"?></td>
+                <td><?=$email['is_admin'] ? "admin" : "collaborator"?></td>
+                <td><a href="../logic/modify_user.php?email=<?php echo $email['email'];?>">Modify</a></td>
+                <td><a href="../logic/soft_user.php?email=<?=$email['email']?>">Soft delete</a></td>
+                <td><a href="../logic/delete_user.php?email=<?php echo $email['email'];?>">Delete</a></td>
             </tr>
             <?php
         }
         ?>
         </tbody>
     </table>
-    <a href="./user/new_user.php" class="btn btn-dark">Add user</a>
+
 </div>
 </body>
 </html>
