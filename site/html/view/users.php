@@ -24,7 +24,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
 <body>
 <div class="container">
     <h2 class="title">User management</h2>
-    <a href="../logic/new_user.php" class="btn btn-dark">Add user</a>
+    <a href="add_user.php" class="btn btn-dark">Add user</a>
     <table class="table">
         <thead>
         <tr>

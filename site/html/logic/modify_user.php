@@ -3,7 +3,7 @@
     <title>PHP Test</title>
 </head>
 <body>
-<?php echo '<p>Modify user</p>';
+<?php echo '<p>update user</p>';
 $version = phpversion();
 print $version; ?>
 </body>
