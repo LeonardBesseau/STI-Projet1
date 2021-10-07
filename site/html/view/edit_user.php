@@ -14,6 +14,8 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
     header("location: inbox.php");
 }
 
+$value = $_GET['email'];
+
 ?>
 
 <!DOCTYPE html>
@@ -24,15 +26,15 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
 </head>
 <body>
 <div class="container">
-    <h2 class="title">Add new user</h2>
+    <h2 class="title">Edit user</h2>
 
-    <form action="../logic/new_user.php" method="post">
+    <form action="../logic/modify_user.php" method="post">
         <div class="form_container">
             <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" required>
+            <input type="text" name="email" readonly class="form-control" value="<?= $value ?>" " >
 
             <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="pswd" required>
+            <input type="password" placeholder="Enter Password" name="pswd">
 
             <label for="active"><b>Active?</b></label>
             <select name="active">
@@ -46,7 +48,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
                 <option value="0" selected>No</option>
             </select>
 
-            <button type="submit">Add</button>
+            <button type="submit">Ok</button>
         </div>
     </form>
 </div>

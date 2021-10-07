@@ -33,7 +33,6 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
-            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -45,12 +44,11 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
         foreach ($sql->fetchAll() as $email) {
             ?>
             <tr>
-                <td><?=$email['email']?></td>
-                <td><?=$email['is_activ'] ? "active" : "inactive"?></td>
-                <td><?=$email['is_admin'] ? "admin" : "collaborator"?></td>
-                <td><a href="../logic/modify_user.php?email=<?php echo $email['email'];?>">Modify</a></td>
-                <td><a href="../logic/soft_user.php?email=<?=$email['email']?>">Soft delete</a></td>
-                <td><a href="../logic/delete_user.php?email=<?php echo $email['email'];?>">Delete</a></td>
+                <td><?= $email['email'] ?></td>
+                <td><?= $email['is_activ'] ? "active" : "inactive" ?></td>
+                <td><?= $email['is_admin'] ? "admin" : "collaborator" ?></td>
+                <td><a href="edit_user.php?email=<?php echo $email['email']; ?>">Edit</a></td>
+                <td><a href="../logic/delete_user.php?email=<?php echo $email['email']; ?>">Delete</a></td>
             </tr>
             <?php
         }

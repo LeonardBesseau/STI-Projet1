@@ -14,13 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //query to add user
         $sql = $file_db->prepare("INSERT INTO users VALUES ('$email','$password','$active','$admin')");
         $result = $sql->execute();
-        
+
         //verify if the user is valid and activ
         if (!empty($result)) {
             header('Location: ../view/users.php');
         } else {
-            //redirect to login page
-            //header('Location: ../view/login.php');
             echo "Problem";
         }
     } else {
