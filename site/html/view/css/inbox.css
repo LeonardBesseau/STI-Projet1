@@ -3,8 +3,20 @@ body {
 }
 
 .container {
+    margin-top: 40px;
     margin-left: 100px;
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+}
+
+.title {
+    margin-right: 50px;
+    align-self: flex-end;
 }
 
 .message_container {
@@ -48,4 +60,17 @@ body {
 
 p {
     margin: 0;
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 15px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
 }
