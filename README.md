@@ -1,3 +1,93 @@
-# STI-Projet1
+# STI - Projet 1
 
-yolo
+Auteurs: Alexandra Cerottini & Fiona Gamboni
+
+
+
+## Introduction
+
+Ce projet est une application Web très simple permettant d'envoyer des messages entre des collaborateurs.
+
+Les technologies utilisées sont Docker, PHP et SQLite.
+
+
+
+## Installation
+
+Cloner l'archive Github avec la commande `git clone git@github.com:Insuline13/STI-Projet1.git`. 
+
+
+
+## Lancement
+
+Une image Docker contenant un serveur Nginx, PHP et SQLite est utilisée. Pour la lancer, il faut utiliser les commandes suivantes:
+
+```shell
+docker run -ti -v "$PWD/site":/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
+
+docker exec -u root sti_project service nginx start
+
+docker exec -u root sti_project service php5-fpm start 
+```
+
+Il suffit ensuite d'aller dans le navigateur et d'écrire `localhost:8080` pour accéder à l'application web.
+
+
+
+## Utilisation
+
+### Login
+
+Lorsqu'un utilisateur n'est pas connecté, il se retrouvera face à une page de login.
+
+Pour se connecter, il suffit d'entrer un email et un mot de passe et de cliquer sur `Login`. Si les informations entrées ne sont pas valides, l'utilisateur se retrouvera à nouveau sur la page de login. Sinon, il se retrouvera dans sa boîte mail.
+
+L'un des comptes suivant peut-être utilisé:
+
+TODO
+
+
+
+### Barre de navigation
+
+Cette barre permet de naviguer entre les différentes fonctionnalités proposées par l'application web. Un collaborateur pourra naviguer vers la boîte mail, changer son mot de passe ou se logout en cliquant dessus. Un admin pourra également gérer les différents utilisateurs.
+
+
+
+### Messages
+
+
+
+### Changer mot de passe
+
+Cette page permet à l'utilisateur actuel de changer son mot de passe. Il lui suffit d'entrer un nouveau mot de passe et de cliquer sur `Change` pour que celui-ci soit changé. Lorsque le changement a été effectué, l'utilisateur est dirigé sur sa boîte mail.
+
+
+
+### Gestion utilisateurs (admin)
+
+Cette page permet à un administrateur de gérer les comptes des utilisateurs de l'application web.
+
+
+
+#### Ajouter
+
+En cliquant sur `Add user` une nouvelle page s'ouvre et un nouvel utilisateur peut-être ajouté. Il suffit pour cela de remplir tous les champs et de cliquer sur `Add`.  Lorsque l'opération a été réalisée, l'utilisateur est redirigé sur la page de gestion des utilisateurs.
+
+
+
+#### Modifier
+
+En cliquant sur `Edit` une nouvelle page s'ouvre et le mot de passe, la validité ou le rôle de l'utilisateur peut-être modifié. Il suffit de modifier les champs souhaités puis de cliquer sur `Ok`. Lorsque l'opération a été réalisée, l'utilisateur est redirigé sur la page de gestion des utilisateurs.
+
+
+
+#### Supprimer
+
+En cliquant sur `Delete`, l'utilisateur sélectionné sera définitivement supprimé de la base de données. Lorsque l'opération a été réalisée, l'utilisateur est redirigé sur la page de gestion des utilisateurs.
+
+
+
+### Logout
+
+En cliquant sur `Logout` dans la barre de navigation, l'utilisateur sera déconnecté et redirigé sur la page de login.

@@ -18,7 +18,17 @@
         crossorigin="anonymous"></script>
 <div class="topnav">
     <a href="inbox.php">Inbox</a>
-    <a href="users.php">Manage users</a>
+
+    <a href="password.php">Change password</a>
+
+    <?php
+    if ($_SESSION['is_admin']) {
+        ?>
+        <a href="users.php">Manage users</a>
+        <?php
+    }
+    ?>
+
     <a href="logout.php">Logout</a>
 </div>
 </body>
