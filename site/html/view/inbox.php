@@ -3,6 +3,7 @@ include '../db_connect.php';
 include '../logic/session.php';
 include 'navigation.php';
 
+
 $email = $_SESSION['email'];
 
 ?>
@@ -13,13 +14,20 @@ $email = $_SESSION['email'];
     <link rel="stylesheet" type="text/css" href="css/inbox.css"/>
 </head>
 <body>
+
 <div class="container">
-    <h2 class="title">My inbox</h2>
+
+    <div class="header">
+        <h2 class="title">My inbox</h2>
+        <button type="button" onclick="window.location.href='./new_message.php'">New message</button>
+    </div>
+
     <?php
     if (isset($file_db)) {
-        //query to fetch users messages
+        // query to fetch users messages
         $sql = $file_db->prepare("SELECT * FROM messages WHERE recipient = '$email' ORDER BY date DESC");
         $sql->execute();
+        // display users messages
         foreach ($sql->fetchAll() as $message) {
             ?>
             <div class="message_container">
@@ -31,11 +39,23 @@ $email = $_SESSION['email'];
                             <p><?= $message['date'] ?></p>
                         </div>
                     </div>
+
                     <div class="message_action">
-                        <button class="button_open">Open</button>
-                        <button class="button_respond">Respond</button>
-                        <button class="button_delete">Delete</button>
+                        <form action="./read_message.php" method="post">
+                            <input type="hidden" name="id" value="<?= $message['id'] ?>"/>
+                            <input type="submit" class="button_open" value="open"/>
+                        </form>
+                        <form action="./reply_message.php" method="post">
+                            <input type="hidden" name="recipient" value="<?= $message['sender'] ?>"/>
+                            <input type="hidden" name="subject" value="<?= $message['subject'] ?>"/>
+                            <input type="submit" class="button_open" value="reply"/>
+                        </form>
+                        <form action="../logic/action_delete_message.php" method="post">
+                            <input type="hidden" name="id" value="<?= $message['id'] ?>"/>
+                            <input type="submit" class="button_open" value="delete"/>
+                        </form>
                     </div>
+
                 </div>
             </div>
             <?php
@@ -43,7 +63,7 @@ $email = $_SESSION['email'];
     }
     ?>
 
-
 </div>
+
 </body>
 </html>
