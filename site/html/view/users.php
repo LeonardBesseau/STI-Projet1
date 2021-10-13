@@ -9,7 +9,7 @@ include 'navigation.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="css/inbox.css"/>
+    <link rel="stylesheet" type="text/css" href="css/users.css"/>
 </head>
 <body>
 <div class="container">

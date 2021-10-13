@@ -1,13 +1,7 @@
 <?php
 include '../db_connect.php';
+include '../logic/session.php';
 include 'navigation.php';
-
-// check if user is logged
-session_start();
-$email = $_SESSION['email'];
-if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
-    header("location: login.php");
-}
 
 // get variables
 $recipient = $_POST['recipient'];
