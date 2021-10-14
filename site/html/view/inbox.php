@@ -12,6 +12,7 @@ $email = $_SESSION['email'];
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="css/inbox.css"/>
+    <meta charset="ISO-8859-1">
 </head>
 <body>
 

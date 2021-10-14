@@ -32,6 +32,8 @@ docker exec -u root sti_project service php5-fpm start
 
 Il suffit ensuite d'aller dans le navigateur et d'écrire `localhost:8080` pour accéder à l'application web.
 
+:warning: Il faut que le fichier `database.sqlite` qui se situe dans le dossier `site/databases` soit en *read and write* pour tous les utilisateurs. 
+
 
 
 ## Utilisation
