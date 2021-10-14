@@ -1,12 +1,9 @@
 <?php
 include '../db_connect.php';
+include 'session.php';
 
-// check if user is logged
-session_start();
 $sender = $_SESSION['email'];
-if (!isset($_SESSION['email']) || $_SESSION['email'] != true) {
-    header("location: login.php");
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // get variables
@@ -24,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = $file_db->prepare("INSERT INTO messages (subject, body, sender, recipient, date) VALUES ('$subject', '$body', '$sender', '$recipient', '$date')");
             $sql->execute();
             //redirect to inbox
-
             header('Location: ../view/inbox.php');
         } else {
             echo 'Error: unable to send message';

@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $active = $_POST['active'];
     $admin = $_POST['admin'];
 
+    // if password is edited
     if (!empty($password)) {
         if (isset($file_db)) {
             $sql = $file_db->prepare("UPDATE users SET password='$password' WHERE email='$email'");
