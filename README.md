@@ -20,19 +20,19 @@ Cloner l'archive Github avec la commande `git clone git@github.com:Insuline13/ST
 
 ## Lancement
 
-Une image Docker contenant un serveur Nginx, PHP et SQLite est utilisée. Pour la lancer, il faut utiliser les commandes suivantes:
+Une image Docker contenant un serveur Nginx, PHP et SQLite est utilisée. Si l'image Docker n'existe pas, il faut au préalable lancer la commande suivante:
 
 ```shell
 docker run -ti -v "$PWD/site":/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
+```
 
-docker exec -u root sti_project service nginx start
+Il suffit ensuite de lancer le script `script_strating.sh` dans le dossier `site`. 
 
-docker exec -u root sti_project service php5-fpm start 
+```sh
+./script_starting.sh
 ```
 
 Il suffit ensuite d'aller dans le navigateur et d'écrire `localhost:8080` pour accéder à l'application web.
-
-:warning: Il faut que le fichier `database.sqlite` qui se situe dans le dossier `site/databases` soit en *read and write* pour tous les utilisateurs. 
 
 
 
