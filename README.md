@@ -1,6 +1,6 @@
-# STI - Projet 1
+# STI - Projet 2
 
-Auteurs: Alexandra Cerottini & Fiona Gamboni
+Auteurs: Alexandra Cerottini & Besseau Léonard
 
 
 
