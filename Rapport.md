@@ -2,7 +2,9 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 09.12.2021
+Date: 12.12.2021
+
+
 
 ## Introduction
 
@@ -16,27 +18,65 @@ Nous allons seulement nous intéresser aux vulnérabilités introduites par le c
 
 
 
-## Décrire le système
+## Le système
 
 ### Objectifs
+
+Le système a pour objectif de permettre à des employés au sein d'une entreprise de s'envoyer des messages électroniques. Il doit pouvoir rester disponible et être sécurisé pour obtenir une bonne réputation.
 
 
 
 ### Hypothèses de sécurité
 
+Seulement les employés actif de l'entreprise peuvent utiliser l'application web. Les administrateurs doivent être de confiance car c'est eux qui vont créer les différents utilisateurs. Une personne externe ne peut pas avoir un compte. Le réseau interne doit également être de confiance.
 
 
 
+### Exigences de sécurité
 
-### Exigences
+- Il faut être authentifié pour utiliser l'application web
+- L'utilisateur doit être actif
 
+- Seulement les administrateurs peuvent ajouter, supprimer ou modifier un utilisateur
 
+- Seulement les administrateurs peuvent voir les informations personnelles (mail, validité, rôle) des autres utilisateurs mais ils ne peuvent pas voir leur mot de passe
+
+- Seulement les administrateurs et les collaborateurs peuvent consulter leur messagerie électronique
+
+- Un administrateur ou un collaborateur ne peut lire et supprimer que les messages électroniques qui lui sont destinés.
+
+- Un administrateur ou un collaborateur ne peut pas supprimer ou modifier un message de la base de données après l'avoir envoyé.
+
+- Un administrateur ou un collaborateur ne peut envoyer un message électronique qu'en son nom.
+
+- Le contenu des messages électroniques doit être protégé en intégrité
+
+- Les informations des utilisateurs doivent être protégées
+
+- L'application web doit être disponible à 99% du temps
+
+  
 
 ### Constitution
 
-(utilisateurs, machines, flux)
+#### Élements du système
 
-(éléments du système et les rôles des utilisateurs)
+- Base de données des utilisateurs
+
+- Base de données des messages électroniques
+
+- Application Web
+
+  
+
+#### Rôles des utilisateurs
+
+- Collaborateur
+- Administrateur
+
+Les collaborateurs peuvent lire les messages électroniques qu'ils ont reçu, écrire un nouveau message à l'attention d'un autre utilisateur ou d'eux-même, répondre à un message, supprimer un message et changer leur propre mot de passe.
+
+Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateurs mais ils peuvent en plus ajouter, modifier (le rôle et la validité) ou supprimer un utilisateur.
 
 
 
@@ -44,7 +84,7 @@ Nous allons seulement nous intéresser aux vulnérabilités introduites par le c
 
 
 
-### Identifier ses biens
+### Les biens
 
 - Application Web
 
@@ -54,56 +94,46 @@ Nous allons seulement nous intéresser aux vulnérabilités introduites par le c
 
 L'application web doit empêcher la modification des messages et en garantir l'intégrité, la confidentialité ainsi que l'authenticité. Le système doit également rester disponible.
 
-La base de données contient des données sensibles sur les utilisateurs comme leur mot de passe ainsi que les messages qu'ils ont échangé.
+L'application web doit seulement être accessible aux collaborateurs et aux administrateurs (sauf la page de login). Les actions des administrateurs sur les utilisateurs sont confidentielles et seulement les administrateurs peuvent les réaliser.
+
+La base de données contient des données sensibles sur les utilisateurs comme leur mot de passe ainsi que les messages qu'ils ont échangé. Il faut de la confidentialité.
+
+Si un incident se produit, celui-ci nuirait la réputation de l'application Web et entraînerait un problème de communication au sein de l'entreprise. De plus, il y aurait une perte de confiance de la part des employés.
 
 
 
-:warning: Parler des acteurs? (collaborateur et admin)
+### Périmètre de sécurisation
+
+:warning: je comprends pas trop ce que c'est....
+
+- Personne sauf les administrateurs ne doit pouvoir accéder à la page de gestion des utilisateurs
+- Personne ne doit avoir accès aux messages des autres utilisateurs
+- Personne ne doit pouvoir envoyer un message en se faisant passer pour quelqu'un d'autre
+- Personne ne doit pouvoir modifier ou supprimer un message après l'avoir envoyé
+- Personne ne doit pouvoir récupérer le mail et le mot de passe d'un utilisateur
 
 
-
-### Définir le périmètre de sécurisation
-
-1. Page d'administration : Donne tout les droits sur tout les utilisateurs
-2. Message des autres utilisateurs : Briserait la confidentialité du site
-3. Modification ou suppression d'un message déjà envoyé : Problématique pour une bonne communication au sein de l'entreprise
-4. Messages forgés : Il deviendrait trivial de nuire à une personne
-5. Vol de login et mots de passe : Les mots de passes étant stockés en clair, une lecture de la DB dans ce but serait catastrophique
-
-#### 
-
-#### Données
-
-Les données stockées sont les suivantes :
-
-- Mots de passes et logins
-- Messages
-
-Il apparait évident que les aspects à protéger sont la **confidentialité** et l'**intégrité** ; un incident au niveau des données résulterait en une peine pécuniaire pour manquement à la protection des données, ainsi qu'une perte de crédibilité auprès des employés.
 
 ## Identifier les sources de menaces
 
-Définir :
-• les sources potentielles d'agression
-• les cibles potentielles (le système ou rebonds)
-• les motivations
-• les compétences
+- Employés mécontents, utilisateurs malins
+  - Motivation: vengeance, curiosité, espionnage industriel
+  - Cible: lire des messages d'autres utilisateurs ou élévation de privilège
+  - Potentialité: haute
+- Hackers, script-kiddies
+  - Motivation: s'amuser, gloire
+  - Cible: n'importe quel élément / actif
+  - Potentialité: haute
+- Cybercriminels
+  - Motivation: financières
+  - Cible: vol de credentials des utilisateurs, modification d'informations, phishing
+  - Potentialité: moyenne
+- Concurrents
+  - Motivation: espionnage industriel
+  - Cible: lire les messages des utilisateurs, déni de service
+  - Potentialité: moyenne
 
 
-
-
-
-
-
-
-
-password trop faible
-
-On est admin et on peut lire les messages d'autre utilisateurs car les ID sont seuqentiel et qu'il n'y a pas de controle d'accès. (on va garder les id séquentiel mais on doit verif que c'est la bonne personne qui accède. On va faire un fetch et vérifier qui y accède et on retournera un forbidden)
-
-XSS
-
-perte de confidentialité
 
 ## Identifier les scénarios d'attaques
 
@@ -118,6 +148,8 @@ dommage
 • Infection des systèmes des utilisateurs
 • Usurpations d'identités
 • Accès aux services payants
+
+
 
 
 
@@ -179,6 +211,22 @@ Pour chaque scénario d'attaque
 
 
 
+Notes de Léonard:
+
+
+
+password trop faible
+
+On est admin et on peut lire les messages d'autre utilisateurs car les ID sont seuqentiel et qu'il n'y a pas de controle d'accès. (on va garder les id séquentiel mais on doit verif que c'est la bonne personne qui accède. On va faire un fetch et vérifier qui y accède et on retournera un forbidden)
+
+XSS
+
+perte de confidentialité
+
+
+
+
+
 Utilisateur peut faire une XSS avec un nouveau message, on peut lire n'importe quel message même si il ne nous est pas adressé, 
 
 à tester: 
@@ -188,3 +236,8 @@ Utilisateur peut faire une XSS avec un nouveau message, on peut lire n'importe q
 - tester si y'a des vulnérabilités dans la version du PHP
 - Utiliser du HTTPS pour sécuriser les connexions.
 
+
+
+On peut faire une injection XSS sur le body mais également dans le subject. L'avantage de le faire dans le subject, c'est que l'utilisateur a juste besoin de se connecter et l'attaque aura lieu immédiatement alors que dans le body l'utilisateur doit ouvrir le message.
+
+On peut supprimer tous les messages d'autres personnes. On peut injecter pour supprimer tous les messages
