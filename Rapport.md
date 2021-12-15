@@ -14,7 +14,7 @@ Les technologies utilisées sont Docker, PHP et SQLite.
 
 L'objectif du projet est d'identifier les failles de sécurité au niveau applicatif, d'analyser les menaces et de sécuriser l'application développée par un des membres du groupe du projet 1. Le cahier des charges du projet 1 doit être respecté.
 
-Nous allons seulement nous intéresser aux vulnérabilités introduites par le code PHP. La sécurisation du serveur web et de la machine sera ignorée.
+Nous allons seulement nous intéresser aux vulnérabilités introduites par le code PHP. La sécurisation du serveur web et de la machine sera ignorée. Des recommandations pourront être émises mais ne seront pas corrigées.
 
 
 
@@ -22,7 +22,7 @@ Nous allons seulement nous intéresser aux vulnérabilités introduites par le c
 
 ### Objectifs
 
-Le système a pour objectif de permettre à des employés au sein d'une entreprise de s'envoyer des messages électroniques.
+Le système a pour objectif de permettre à des employés au sein d'une entreprise de s'envoyer des messages électroniques. Le contenu de l'application est donc dynamique et généré par les utilisateurs. L'application est importante pour la communication interne de l'entreprise.
 
 
 
@@ -79,8 +79,6 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
 ### DFD
 
-
-
 ### Les biens
 
 - Application Web
@@ -118,12 +116,6 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
     L'auteur d'un message doit être le véritable auteur (réputation)
 
-### Menaces
-
-Un attaquant qui veut perturber le fonctionnement de l'entreprise pourrait attaquer la disponibilité du service
-
-s
-
 L'application web doit seulement être accessible aux collaborateurs et aux administrateurs (sauf la page de login). Les actions des administrateurs sur les utilisateurs sont confidentielles et seulement les administrateurs peuvent les réaliser.
 
 La base de données contient des données sensibles sur les utilisateurs comme leur mot de passe ainsi que les messages qu'ils ont échangé. Il faut de la confidentialité.
@@ -144,15 +136,19 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
 
 
 
+
+
+
+
+
+
+
+
 ## Identifier les sources de menaces
 
-- Employés mécontents, utilisateurs malins
+- Employés mécontents
   - Motivation: vengeance, curiosité, espionnage industriel
   - Cible: lire des messages d'autres utilisateurs ou élévation de privilège
-  - Potentialité: haute
-- Hackers, script-kiddies
-  - Motivation: s'amuser, gloire
-  - Cible: n'importe quel élément / actif
   - Potentialité: haute
 - Cybercriminels
   - Motivation: financières
@@ -167,71 +163,89 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
 
 ## Identifier les scénarios d'attaques
 
-Identifier les scénarios probables qui conduiront à un
-dommage
-• Pensez typiquement à
-• Vols d'informations
-• confidentialité, compétition, ...
-• Destruction information
-• Modification information or systems
-• Arrêt de processus
-• Infection des systèmes des utilisateurs
-• Usurpations d'identités
-• Accès aux services payants
+#### Indisponibilité du service.
 
+Impact: Élevé (financier)
 
+Source de la menace: Hacker, concurrent
 
+Motivation: Gêner l'activité. Rançon (crime organisés).
 
+Cible: serveur web
 
+Scénario d'attaque: 
 
+- Injection. 
+- Bug avec fuite de mémoire
 
+Contrôles: Validation des entrées.
 
+#### Récupération des données internes
 
-### Éléments du système attaqué
+Impact: Élevé (financier, réputation, données personelles)
 
+Source de la menace: Concurrent
 
+Motivation: Récupérer des information .
 
-### Motivation(s)
+Cible: base de données
 
+Scénario d'attaque: 
 
+- Injection. 
+- Authentification+ Autorisation bypass
 
-### Scénario(s) d'attaque
+Contrôles: 
 
+- Validation des entrées.
+- Contrôle des accès
 
+#### Suppression des données
 
-### STRIDE
+Impact: Élevé (financier, données)
 
-• Spoofing
-• Example: authenticating to the application using a stolen password
-• Countermeasure: strong authentication, secure data transport
-• Tampering
-• Example: using SQL injection to modify or delete records of a data base
-• Countermeasure: use of prepared statements, escaping user input
-• Repudiation
-• Example: Modify a user shipping address on an e-commerce
-• Countermeasure: request address confirmation and additional authentication to confirm
-• Information disclosure
-• Example: intercept clear-text browser traffic in a public wifi
-• Countermeasures: traffic encryption
-• Denial of service
-• Example: allocate session memory based on user provided values
-• Countermeasures: validate size before allocating (input validation)
-• Elevation of privileges
-• Example: copy/paste an administrative URL within a normal user session
-• Countermeasures: authorization mechanism
+Source de la menace: Employé mécontent
+
+Motivation: Supprimer des informations
+
+Cible: base de données
+
+Scénario d'attaque: 
+
+- Injection. 
+- Autorisation bypass
+
+Contrôles: 
+
+- Validation des entrées.
+- Contrôle des accès
 
 
 
 ## Identifier les contre-mesures
 
-Pour chaque scénario d'attaque
-• Identifier les solutions et contremesures
+- Valider les inputs lors des requêtes.
+- Utiliser des requêtes SQL préparées.
+- Contrôle d'accès pour les messages et les données utilisateurs.
+- Contrôle d'accès pour les fonctionnalités de l'administrateur.
 
 
 
 
 
 ### En fonction des scénarios d'attaques
+
+
+
+### Menaces
+
+
+
+### Scénarios
+
+### Contre-mesures
+
+- 
 
 
 
