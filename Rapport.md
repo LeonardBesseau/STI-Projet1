@@ -22,38 +22,34 @@ Nous allons seulement nous intéresser aux vulnérabilités introduites par le c
 
 ### Objectifs
 
-Le système a pour objectif de permettre à des employés au sein d'une entreprise de s'envoyer des messages électroniques. Il doit pouvoir rester disponible et être sécurisé pour obtenir une bonne réputation.
+Le système a pour objectif de permettre à des employés au sein d'une entreprise de s'envoyer des messages électroniques.
 
 
 
 ### Hypothèses de sécurité
 
-Seulement les employés actif de l'entreprise peuvent utiliser l'application web. Les administrateurs doivent être de confiance car c'est eux qui vont créer les différents utilisateurs. Une personne externe ne peut pas avoir un compte. Le réseau interne doit également être de confiance.
+- Une personne externe ne peut pas avoir un compte. 
+- Seulement les employés actif de l'entreprise peuvent utiliser l'application web
+- Les administrateurs de la base de données et de l'application sont de confiance.
+- Il est impossible d'usurper l'identité du serveur.
 
 
 
 ### Exigences de sécurité
 
 - Il faut être authentifié pour utiliser l'application web
-- L'utilisateur doit être actif
 
-- Seulement les administrateurs peuvent ajouter, supprimer ou modifier un utilisateur
+- Le compte de l'utilisateur doit être actif pour pouvoir se connecter 
 
-- Seulement les administrateurs peuvent voir les informations personnelles (mail, validité, rôle) des autres utilisateurs mais ils ne peuvent pas voir leur mot de passe
+- Seuls les administrateurs peuvent ajouter, supprimer ou modifier un utilisateur
 
-- Seulement les administrateurs et les collaborateurs peuvent consulter leur messagerie électronique
+- Seuls les administrateurs peuvent voir les informations personnelles (mail, validité, rôle) des autres utilisateurs mais ils ne peuvent pas voir leur mot de passe
 
-- Un administrateur ou un collaborateur ne peut lire et supprimer que les messages électroniques qui lui sont destinés.
+- Personne ne peut lire et supprimer les messages électroniques qui destinés à d'autres personnes.
 
-- Un administrateur ou un collaborateur ne peut pas supprimer ou modifier un message de la base de données après l'avoir envoyé.
+- Personne ne peut supprimer ou modifier un message  après l'avoir envoyé.
 
-- Un administrateur ou un collaborateur ne peut envoyer un message électronique qu'en son nom.
-
-- Le contenu des messages électroniques doit être protégé en intégrité
-
-- Les informations des utilisateurs doivent être protégées
-
-- L'application web doit être disponible à 99% du temps
+- Personne ne peut envoyer un message électronique au nom d'une autre personne.
 
   
 
@@ -65,18 +61,19 @@ Seulement les employés actif de l'entreprise peuvent utiliser l'application web
 
 - Base de données des messages électroniques
 
-- Application Web
+- Application Web (Server applicatif php + server web NGINX)
 
   
 
 #### Rôles des utilisateurs
 
 - Collaborateur
-- Administrateur
 
 Les collaborateurs peuvent lire les messages électroniques qu'ils ont reçu, écrire un nouveau message à l'attention d'un autre utilisateur ou d'eux-même, répondre à un message, supprimer un message et changer leur propre mot de passe.
 
-Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateurs mais ils peuvent en plus ajouter, modifier (le rôle et la validité) ou supprimer un utilisateur.
+- Administrateur
+
+Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateurs mais ils peuvent en plus ajouter, modifier ou supprimer un utilisateur.
 
 
 
@@ -88,11 +85,44 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
 - Application Web
 
+  - Disponibilité
+
+  L'application se doit d'être disponible pour être utilisable. Son interruption pourrait perturber le fonctionnement de l'entreprise.
+
+  - Authenticité + Confidentialité
+
+  Seuls les membres de l’entreprise ont accès à l'application. Une personne externe à l'entreprise pourrait obtenir des informations confidentielles autrement.
+
 - La base de données
   - Table users (liste des utilisateurs)
+
+    - Confidentialité
+
+    Les données personnelles ne doivent pas être accessibles aux autres utilisateurs. (Sphère privée)
+
+    - Intégrité
+
+    Une modification des données pourrait nuire à un utilisateur.
+
   - Table messages (liste des messages)
 
-L'application web doit empêcher la modification des messages et en garantir l'intégrité, la confidentialité ainsi que l'authenticité. Le système doit également rester disponible.
+    - Confidentialité
+
+    Les messages entre 2 utilisateurs sont censés être confidentiel pour tous les autres utilisateurs
+
+    - Intégrité
+
+    Un message ne doit pas être modifié après envoi ou supprimé par l'auteur (non-répudiation)
+
+    - Authenticité
+
+    L'auteur d'un message doit être le véritable auteur (réputation)
+
+### Menaces
+
+Un attaquant qui veut perturber le fonctionnement de l'entreprise pourrait attaquer la disponibilité du service
+
+s
 
 L'application web doit seulement être accessible aux collaborateurs et aux administrateurs (sauf la page de login). Les actions des administrateurs sur les utilisateurs sont confidentielles et seulement les administrateurs peuvent les réaliser.
 
