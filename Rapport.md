@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 12.12.2021
+Date: 22.12.2021
 
 
 
@@ -45,9 +45,9 @@ Le système a pour objectif de permettre à des employés au sein d'une entrepri
 
 - Seuls les administrateurs peuvent voir les informations personnelles (mail, validité, rôle) des autres utilisateurs mais ils ne peuvent pas voir leur mot de passe
 
-- Personne ne peut lire et supprimer les messages électroniques qui destinés à d'autres personnes.
+- Personne ne peut lire et supprimer les messages électroniques qui sont destinés à d'autres personnes.
 
-- Personne ne peut supprimer ou modifier un message  après l'avoir envoyé.
+- Personne ne peut supprimer ou modifier un message après l'avoir envoyé.
 
 - Personne ne peut envoyer un message électronique au nom d'une autre personne.
 
@@ -79,6 +79,8 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
 ### DFD
 
+
+
 ### Les biens
 
 - Application Web
@@ -106,7 +108,7 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
     - Confidentialité
 
-    Les messages entre 2 utilisateurs sont censés être confidentiel pour tous les autres utilisateurs
+    Les messages entre 2 utilisateurs sont censés être confidentiels pour tous les autres utilisateurs
 
     - Intégrité
 
@@ -126,21 +128,11 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
 
 ### Périmètre de sécurisation
 
-:warning: je comprends pas trop ce que c'est....
-
 - Personne sauf les administrateurs ne doit pouvoir accéder à la page de gestion des utilisateurs
 - Personne ne doit avoir accès aux messages des autres utilisateurs
 - Personne ne doit pouvoir envoyer un message en se faisant passer pour quelqu'un d'autre
 - Personne ne doit pouvoir modifier ou supprimer un message après l'avoir envoyé
 - Personne ne doit pouvoir récupérer le mail et le mot de passe d'un utilisateur
-
-
-
-
-
-
-
-
 
 
 
@@ -158,94 +150,177 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
   - Motivation: espionnage industriel
   - Cible: lire les messages des utilisateurs, déni de service
   - Potentialité: moyenne
+- Hackers, script-kiddies
+  - Motivation: s'amuser, gloire
+  - Cible: n'importe quel élément /actif
+  - Potentialité: faible
 
 
 
-## Identifier les scénarios d'attaques
 
-#### Indisponibilité du service.
+## Les scénarios d'attaques
 
-Impact: Élevé (financier)
+#### Scénario 1: Indisponibilité du service
 
-Source de la menace: Hacker, concurrent
+Stride: denial of service
 
-Motivation: Gêner l'activité. Rançon (crime organisés).
+Impact: élevé (financier)
+
+Source de la menace: hacker, concurrent, employé mécontent
+
+Motivation: défi, rançon (crime organisés), gêner l'activité 
 
 Cible: serveur web
 
 Scénario d'attaque: 
 
-- Injection. 
+- Injection
 - Bug avec fuite de mémoire
 
-Contrôles: Validation des entrées.
+Contrôles: Validation des entrées
 
-#### Récupération des données internes
+#### Scénario 2: Récupération des données internes
 
-Impact: Élevé (financier, réputation, données personelles)
+Stride: Information disclosure
 
-Source de la menace: Concurrent
+Impact: élevé (financier, réputation, données personnelles)
 
-Motivation: Récupérer des information .
+Source de la menace: concurrent, hacker, cybercriminel
+
+Motivation: récupérer des informations
 
 Cible: base de données
 
 Scénario d'attaque: 
 
-- Injection. 
+- Injection
 - Authentification+ Autorisation bypass
 
 Contrôles: 
 
-- Validation des entrées.
+- Validation des entrées
 - Contrôle des accès
+- CSRF
+- XSS
 
-#### Suppression des données
+#### Scénario 3: Suppression des données
 
-Impact: Élevé (financier, données)
+Stride: Tampering
 
-Source de la menace: Employé mécontent
+Impact: élevé (financier, données personnelles)
 
-Motivation: Supprimer des informations
+Source de la menace: employé mécontent, concurrent
+
+Motivation: supprimer des informations
 
 Cible: base de données
 
 Scénario d'attaque: 
 
-- Injection. 
+- Injection
+- Autorisation bypass
+- CSRF
+- XSS
+
+Contrôles: 
+
+- Validation des entrées
+- Contrôle des accès
+
+#### Scénario 4: Modification des données
+
+Stride: repudiation
+
+Impact: élevé (financier, données personnelles)
+
+Source de la menace: employé mécontent
+
+Motivation: supprimer des informations
+
+Cible: base de données
+
+Scénario d'attaque: 
+
+- Injection
 - Autorisation bypass
 
 Contrôles: 
 
-- Validation des entrées.
+- Validation des entrées
 - Contrôle des accès
 
+#### Scénario 5: Deviner un mot de passe
+
+Stride: spoofing
+
+Impact: moyen (données personnelles, réputation)
+
+Source de la menace: employé mécontent, hacker, cybercriminel, concurrent
+
+Motivation: usurpation d'identité, lire messages de quelqu'un d'autre, avoir accès aux fonctionnalités des administrateurs, défi, accès à l'application
+
+Cible: credentials
+
+Scénario d'attaque: 
+
+- Tests de mots de passe simple (ex: 123) car aucune vérification
+
+- Tests de différents mots de passe autant de fois que l'on veut
+
+Contrôles: 
+
+- Mettre en place un mot de passe fort (au moins 8 caractères avec 1 chiffre et un caractère spécial)
+- Limiter le nombre de tentatives de login
+
+#### Scénario 6: Vol de mot de passe
+
+Stride: spoofing, information disclosure 
+
+Impact: élevé (données personnelles, réputation)
+
+Source de la menace: employé mécontent 
+
+Motivation: usurpation d'identité, lire messages de quelqu'un d'autre, avoir accès aux fonctionnalités des administrateurs
+
+Cible: credentials
+
+Scénario d'attaque: 
+
+- Un employé peut utiliser Wireshark sur le réseau interne de l'entreprise
+
+Contrôles: 
+
+- Utiliser HTTPS pour sécuriser les connexions
+
+#### Scénario 7: Vol de session
+
+Stride: spoofing, élevation de privilèges
+
+Impact: élevé (données personnelles, réputation)
+
+Source de la menace: employé mécontent, hacker, cybercriminel, concurrent
+
+Motivation: usurpation d'identité, lire messages de quelqu'un d'autre, avoir accès aux fonctionnalités des administrateurs, défi, accès à l'application
+
+Cible: cookie de session
+
+Scénario d'attaque: 
+
+- Réaliser une attaque XSS
+- Voler un cookie de session PHP par défaut (PHPSESSID)
+
+Contrôles: 
+
+- Validation des entrées
 
 
-## Identifier les contre-mesures
 
-- Valider les inputs lors des requêtes.
-- Utiliser des requêtes SQL préparées.
-- Contrôle d'accès pour les messages et les données utilisateurs.
-- Contrôle d'accès pour les fonctionnalités de l'administrateur.
+## Les contre-mesures
 
-
-
-
-
-### En fonction des scénarios d'attaques
-
-
-
-### Menaces
-
-
-
-### Scénarios
-
-### Contre-mesures
-
-- 
+- Valider les inputs lors des requêtes
+- Utiliser des requêtes SQL préparées
+- Contrôle d'accès pour les messages et les données utilisateurs
+- Contrôle d'accès pour les fonctionnalités de l'administrateur
 
 
 
