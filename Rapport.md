@@ -294,7 +294,7 @@ Contrôles:
 
 - Utiliser HTTPS pour sécuriser les connexions
 
-#### Scénario 7: Vol de session
+#### Scénario 7: Vol de session/Compte
 
 Stride: spoofing, élevation de privilèges
 
