@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 22.12.2021
+Date: 09.01.2022
 
 
 
@@ -176,18 +176,20 @@ Cible: serveur web
 
 Scénario d'attaque: 
 
-- Injection
+- XSS
+  - Une injection XSS peut être faite dans le sujet ou le corps du message
+
 - Bug avec fuite de mémoire
 
 Contrôles: Validation des entrées
 
 #### Scénario 2: Récupération des données internes
 
-Stride: Information disclosure
+Stride: information disclosure, elevation of privilege, tampering
 
 Impact: élevé (financier, réputation, données personnelles)
 
-Source de la menace: concurrent, hacker, cybercriminel
+Source de la menace: concurrent, hacker, cybercriminel, employé mécontent
 
 Motivation: récupérer des informations
 
@@ -195,19 +197,60 @@ Cible: base de données
 
 Scénario d'attaque: 
 
-- Injection
+- Injection SQL
+
+  - Avec une injection SQL, on peut afficher le premier mail de la base de données. Dans le code HTML de l'inbox, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
+
+    ![image-20220109171551344](figures/image-20220109171551344.png)
+
+    Lorsqu'il cliquera sur le bouton *open*, le premier mail de la base de donnée s'affichera alors que celui-ci ne lui était pas destiné.
+
+- CSRF
+
+  - L'attaquant peut construire une attaque CSRF modifiant automatiquement le mot de passe de l'admin par un mot de passe voulu et par exemple envoyer un faux site web à l'admin par mail. Lorsque l'admin se cliquera sur ce site web malicieux, il sera redirigé sur le site web vulnérable et son mot de passe aura été modifié sans qu'il s'en aperçoive. L'attaquant pourra ensuite se connecter sur le compte de l'admin et accéder aux données de celui-ci.
+
+    ```php+HTML
+    <form action="../logic/new_password.php" method="post">
+            <div class="form_container">
+                <label for="email"><b>Email</b></label>
+                <input type="text" name="email" readonly class="form-control" value="<?= $_SESSION['email'] ?>" " >
+    
+                <label for="psw"><b>New password</b></label>
+                <input type="password" placeholder="Enter new password" name="pswd" required>
+                <button type="submit">Change</button>
+            </div>
+        </form>
+    ```
+
+    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/password.php`. Il faut aussi y insérer l’émail de l'admin à qui l'on veut modifier le mot de passe. Il faut également ajouter un champ `value` et y mettre le mot de passe que l'on souhaite. À la fin, il faut y insérer une balise script contenant:
+
+    ```php+HTML
+    <script>document.forms[0].submit();<\script>
+    ```
+
+    Lorsque l'admin ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
+
 - Authentification+ Autorisation bypass
+
+  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
+
+- Modification du HTML
+
+  - Un employé connecté sur l'application web peut consulter n'importe quel message de la base de donnée en modifiant la valeur du message et en cliquant pour l'ouvrir
+
+    ![image-20220109130818911](figures/image-20220109130818911.png)
+
 
 Contrôles: 
 
 - Validation des entrées
 - Contrôle des accès
-- CSRF
-- XSS
+- Token anti-CSRF
+- Vérifier que l'action est effectuée sur un message appartenant à l'utilisateur
 
 #### Scénario 3: Suppression des données
 
-Stride: Tampering
+Stride: tampering, repudiation
 
 Impact: élevé (financier, données personnelles)
 
@@ -219,19 +262,42 @@ Cible: base de données
 
 Scénario d'attaque: 
 
-- Injection
+- Injection SQL
+
+  - Avec une injection SQL, on peut supprimer tous les mails de la base de données. Pour ce faire, dans le code HTML de l'inbox, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
+
+    ![image-20220109174352288](figures/image-20220109174352288.png)
+
+    345 étant un id non valable pour un mail. Lorsqu'il cliquera sur le bouton *delete*, tous les mails seront supprimés.
+
 - Autorisation bypass
+
+  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
+
 - CSRF
+
+  - :warning: **A VERIFIER** On enlève???    Force l'utilisateur à supprimer tous les utilisateurs ou messages (par exemple on fait une CSRF combiné avec de SQL)
+
 - XSS
+
+  - :warning: **A VERIFIER** On enlève?????
+
+- Modification du HTML
+
+  - Un employé connecté sur l'application web peut supprimer n'importe quel message de la base de donnée en modifiant la valeur du message et en cliquant pour le supprimer
+
+    ![image-20220109130943771](figures/image-20220109130943771.png)
 
 Contrôles: 
 
 - Validation des entrées
 - Contrôle des accès
+- Token anti-CSRF
+- Vérifier que l'action est effectuée sur un message appartenant à l'utilisateur
 
 #### Scénario 4: Modification des données
 
-Stride: repudiation
+Stride: repudiation, tampering, elevation of privileges
 
 Impact: élevé (financier, données personnelles)
 
@@ -243,8 +309,32 @@ Cible: base de données
 
 Scénario d'attaque: 
 
-- Injection
+- Injection SQL
+
+  - Avec une injection SQL, il est possible de modifier les mots de passes de toute la base de données. Il suffit à l'attaquant connecté sur l'application web d'aller dans *Change password* puis de modifier l'HTML avec faux utilisateur et l'injection puis de changer le mot de passe. Par exemple:
+
+    ![image-20220109182544109](figures/image-20220109182544109.png)
+
+    Nous pouvons voir sur *phpliteadmin* que tous les utilisateurs ont les mêmes mots de passes
+
+    ![image-20220109182643042](figures/image-20220109182643042.png)
+
+    L'attaquant peut donc accéder à tous les comptes.
+
+- CSRF
+
+  - Un attaquant peut forcer l'administrateur à changer son mot de passe. Voir le point **Récupération de données internes**  
+
 - Autorisation bypass
+
+  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
+
+- Modification du HTML
+
+  - Un attaquant connecté sur l'application web peut modifier dans l'HTML le mot de passe de n'importe quel utilisateur. Pour ce faire, il lui suffit de modifier l'email et de choisir le mot de passe qu'il veut. Par exemple:
+
+    ![image-20220109183937269](figures/image-20220109183937269.png)
+
 
 Contrôles: 
 
@@ -266,12 +356,15 @@ Cible: credentials
 Scénario d'attaque: 
 
 - Tests de mots de passe simple (ex: 123) car aucune vérification
+  - L'attaquant peut tester une liste de mot de passe récurrents à l'aide d'un outil car lors de la création d'un compte ou lors du changement du mot de passe, il n'est pas demandé que celui-ci comporte un nombre minimum de caractères, de chiffres ou de caractères spéciaux.
 
 - Tests de différents mots de passe autant de fois que l'on veut
+  - L'attaquant peut tester n'importe quel mot de passe à volonté à l'aide d'un outil.
+
 
 Contrôles: 
 
-- Mettre en place un mot de passe fort (au moins 8 caractères avec 1 chiffre et un caractère spécial)
+- Mettre en place un mot de passe fort (au moins 8 caractères avec 1 chiffre et 1 caractère spécial)
 - Limiter le nombre de tentatives de login
 
 #### Scénario 6: Vol de mot de passe
@@ -290,13 +383,18 @@ Scénario d'attaque:
 
 - Un employé peut utiliser Wireshark sur le réseau interne de l'entreprise
 
+  - Les informations transitent en clair sur le réseau donc lorsqu'un utilisateur se connecte à son compte, une autre personne se trouvant sur le même réseau peut sniffer le trafic et récupérer les credentials de cet utilisateur.
+
+    ![image-20220109125112329](figures/image-20220109125112329.png)
+
+
 Contrôles: 
 
 - Utiliser HTTPS pour sécuriser les connexions
 
 #### Scénario 7: Vol de session/Compte
 
-Stride: spoofing, élevation de privilèges
+Stride: spoofing, tampering, repudiation, information disclosure, elevation of privileges
 
 Impact: élevé (données personnelles, réputation)
 
@@ -308,12 +406,107 @@ Cible: cookie de session
 
 Scénario d'attaque: 
 
-- Réaliser une attaque XSS
-- Voler un cookie de session PHP par défaut (PHPSESSID)
+- Voler un cookie de session PHP par défaut (PHPSESSID) avec une attaque XSS
+
+  - Grâce à [Requestbin](https://requestbin.net/) (un site nous permettant de récupérer des requêtes), un attaquant peut voler le cookie de session de l'admin. Pour ce faire, il lui suffit d'envoyer un mail contenant une attaque XSS à l'admin (l'attaque peut être réalisé dans le subject ou dans le message).
+
+    <img src="figures/image-20220109115433349.png" alt="image-20220109115433349" style="zoom: 67%;" />
+
+    Lorsque l'admin ouvrira le message il ne verra rien d'anormal mais l'attaque XSS aura été réalisée.
+
+    <img src="figures/image-20220109115844446.png" alt="image-20220109115844446" style="zoom:67%;" />
+
+    Sur RequestBin, l'attaquant peut récupérer le cookie de session de l'admin.
+
+    <img src="figures/image-20220108234312574.png" alt="image-20220108234312574" style="zoom:67%;" />
+
+
+Il peut ensuite remplacer son propre cookie de session par le cookie de session de l'admin. Il aura réussi à prendre possession du compte de l'administrateur.
+
+- Attaque CSRF
+  - Voir le point **Récupération de données internes** 
 
 Contrôles: 
 
 - Validation des entrées
+- Token anti-CSRF
+
+#### Scénario 8: Élévation de privilège
+
+Stride: tampering, repudiation, elevation of privileges
+
+Impact: faible (données personnelles, réputation)
+
+Source de la menace: employé mécontent
+
+Motivation: avoir accès aux fonctionnalités des administrateurs
+
+Cible: formulaire
+
+Scénario d'attaque: 
+
+- Attaque CSRF
+
+  - L'attaquant pourrait, grâce à une attaque CSRF, forcer l'admin à modifier le rôle de l'attaquant pour le faire passer de collaborateur à administrateur. L'attaquant peut construire une page web contant l'HTML avec le formulaire pour modifier un membre et l'envoyer par email à l'administrateur
+
+    ```php+HTML
+    <form action="../logic/modify_user.php" method="post">
+            <div class="form_container">
+                <label for="email"><b>Email</b></label>
+                <input type="text" name="email" readonly class="form-control" value="<?= $value ?>" " >
+    
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="pswd">
+    
+                <label for="active"><b>Active?</b></label>
+                <select name="active">
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
+                </select>
+    
+                <label for="admin"><b>Admin?</b></label>
+                <select name="admin">
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
+                </select>
+    
+                <button type="submit">Ok</button>
+            </div>
+        </form>
+    ```
+
+    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/edit_user.php?email=test1@test.com`. Il faut aussi y insérer l’émail de l'employé à qui l'on veut élever les privilèges (ici test1@test.com). Il faut également modifier les options sélectionnées pour les paramètres "active" et "admin". À la fin, il faut y insérer une balise script contenant:
+
+    ```php+HTML
+    <script>document.forms[0].submit();<\script>
+    ```
+
+    Lorsque l'admin ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
+
+Contrôles:
+
+- Token anti-CSRF
+
+#### Scénario 9: Intrusion dans la base de données
+
+Stride: spoofing
+
+Impact: moyen (perte de confidentialité et d'intégrité)
+
+Source de la menace: employé mécontent, hacker, cybercriminel, concurrent 
+
+Motivation: avoir accès à tout
+
+Cible: base de données
+
+Scénario d'attaque: 
+
+- Mot de passe faible
+  - Un attaquant sachant que la base de données est accessible via l'url `http://localhost:8080/phpliteadmin.php` pourrait aller sur la page et se retrouver face à la page de connexion. Le mot de passe étant "admin", il serait facile de le trouver. L'attaquant aurait ensuite accès à toute la base de données.
+
+Contrôles:
+
+- Mettre un nouveau mot de passe dans le fichier *phpliteadmin.php*. 
 
 
 
@@ -327,6 +520,18 @@ Contrôles:
 
 
 ## Conclusion
+
+Pour conclure, grâce à l'analyse de menaces, notre application est maintenant plus sécurisée. Beaucoup de vulnérabilités ont été identifiées et des contre-mesures ont été ajoutées pour qu'elles ne se produisent plus. Il reste encore à mettre le site en HTTPS pour une sécurité optimale. 
+
+Les analyses de menaces devraient être réalisées à chaque création d'une nouvelle application. Elles permettent vraiment de se rendre compte des vulnérabilités.
+
+Ce travail nous a permis d'acquérir des réflexes en matière de sécurité ainsi que de tester des scénarios d'attaques.
+
+
+
+
+
+
 
 
 
