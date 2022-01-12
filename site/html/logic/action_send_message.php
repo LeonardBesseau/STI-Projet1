@@ -25,8 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($file_db)) {
             // query to send users message
             $sql = $file_db->prepare("INSERT INTO messages (subject, body, sender, recipient, date) VALUES (:subject,:body,:sender,:recipient,:date)");
-            $sql->bindParam('subject', $subject);
-            $sql->bindParam('body', $body);
+            $htmlspecialchars = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('subject', $htmlspecialchars);
+            $htmlspecialchars = htmlspecialchars($body, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('body', $htmlspecialchars);
             $sql->bindParam('sender', $sender);
             $sql->bindParam('recipient', $recipient);
             $sql->bindParam('date', $date);
