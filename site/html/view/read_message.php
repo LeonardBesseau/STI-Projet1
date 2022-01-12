@@ -19,7 +19,9 @@ print($id);
     <?php
     if (isset($file_db)) {
         // query to fetch users message
-        $sql = $file_db->prepare("SELECT * FROM messages WHERE id = '$id'");
+        $sql = $file_db->prepare("SELECT * FROM messages WHERE id = :id AND recipient = :email");
+        $sql->bindParam('email', $email);
+        $sql->bindParam('id', $id);
         $sql->execute();
         $message = $sql->fetch();
         ?>

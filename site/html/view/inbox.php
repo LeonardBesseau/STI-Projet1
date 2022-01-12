@@ -26,7 +26,8 @@ $email = $_SESSION['email'];
     <?php
     if (isset($file_db)) {
         // query to fetch users messages
-        $sql = $file_db->prepare("SELECT * FROM messages WHERE recipient = '$email' ORDER BY date DESC");
+        $sql = $file_db->prepare("SELECT * FROM messages WHERE recipient = :email ORDER BY date DESC");
+        $sql->bindParam('email', $email);
         $sql->execute();
         // display users messages
         foreach ($sql->fetchAll() as $message) {
