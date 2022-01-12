@@ -274,9 +274,9 @@ Scénario d'attaque:
 
   - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
 
-- Modification du HTML
+- Envoi d'une requete non-authenitifé
 
-  - N'importe qui (même une personne non connecté) sur l'application web peut supprimer n'importe quel message de la base de donnée en modifiant la valeur du message et en cliquant pour le supprimer
+  - N'importe qui (même une personne non connecté) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requete
 
     ![image-20220109130943771](figures/image-20220109130943771.png)
 
