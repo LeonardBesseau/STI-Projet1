@@ -274,9 +274,9 @@ Scénario d'attaque:
 
   - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
 
-- Envoi d'une requete non-authenitifé
+- Envoi d'une requête non-authentifié
 
-  - N'importe qui (même une personne non connecté) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requete
+  - N'importe qui (même une personne non-connectée) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requête faite par le formulaire.
 
     ![image-20220109130943771](figures/image-20220109130943771.png)
 
@@ -505,6 +505,16 @@ Contrôles:
 
 
 ## Les contre-mesures
+
+### Politique de mots de passe
+
+Concerne: scénario 5 et 9
+
+dire ce qui a été ajouté/modifié dans quel fichier... et en quoi ça résout le problème
+
+
+
+
 
 - Valider les inputs lors des requêtes
 - Utiliser des requêtes SQL préparées
