@@ -1,5 +1,4 @@
 <?php
-
 include '../db_connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -11,7 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         if (isset($file_db)) {
             //query to fetch user
-            $sql = $file_db->prepare("SELECT * FROM users WHERE email = '$email' and password = '$password'");
+            $sql = $file_db->prepare("SELECT * FROM users WHERE email = :email and password = :password");
+            $sql->bindParam('password', $password);
+            $sql->bindParam('email', $email);
             $sql->execute();
             $result = $sql->fetch();
             //verify if the user is valid and activ
@@ -32,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Close file database.sqlite connection
         $file_db = null;
         // Print PDOException message
-        echo $e->getMessage();
     }
 }
 
