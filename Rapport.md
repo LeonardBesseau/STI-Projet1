@@ -274,14 +274,6 @@ Scénario d'attaque:
 
   - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
 
-- CSRF
-
-  - :warning: **A VERIFIER** On enlève???    Force l'utilisateur à supprimer tous les utilisateurs ou messages (par exemple on fait une CSRF combiné avec de SQL)
-
-- XSS
-
-  - :warning: **A VERIFIER** On enlève?????
-
 - Modification du HTML
 
   - Un employé connecté sur l'application web peut supprimer n'importe quel message de la base de donnée en modifiant la valeur du message et en cliquant pour le supprimer
@@ -405,6 +397,10 @@ Motivation: usurpation d'identité, lire messages de quelqu'un d'autre, avoir ac
 Cible: cookie de session
 
 Scénario d'attaque: 
+
+- Injection SQL
+
+On peut injecter `' or 1=1 --+` à la place du mot de passe lorsque l'on essaye de se login et l'on peut se connecter sans avoir le mot de passe
 
 - Voler un cookie de session PHP par défaut (PHPSESSID) avec une attaque XSS
 
