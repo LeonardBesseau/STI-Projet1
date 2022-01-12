@@ -2,6 +2,12 @@
 include '../db_connect.php';
 include 'session.php';
 
+session_start();
+if (!(isset($_SESSION['email']))) {
+    header("Location: /view/login.php");
+    return;
+}
+
 $sender = $_SESSION['email'];
 
 
@@ -18,7 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         if (isset($file_db)) {
             // query to send users message
-            $sql = $file_db->prepare("INSERT INTO messages (subject, body, sender, recipient, date) VALUES ('$subject', '$body', '$sender', '$recipient', '$date')");
+            $sql = $file_db->prepare("INSERT INTO messages (subject, body, sender, recipient, date) VALUES (:subject,:body,:sender,:recipient,:date)");
+            $sql->bindParam('subject', $subject);
+            $sql->bindParam('body', $body);
+            $sql->bindParam('sender', $sender);
+            $sql->bindParam('recipient', $recipient);
+            $sql->bindParam('date', $date);
             $sql->execute();
             //redirect to inbox
             header('Location: ../view/inbox.php');
@@ -32,7 +43,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $e->getMessage();
     }
 }
-
-?>
-
-
