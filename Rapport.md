@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 09.01.2022
+Date: 12.01.2022
 
 
 
@@ -284,7 +284,6 @@ Contrôles:
 
 - Validation des entrées
 - Contrôle des accès
-- Token anti-CSRF
 - Vérifier que l'action est effectuée sur un message appartenant à l'utilisateur
 
 #### Scénario 4: Modification des données
@@ -399,8 +398,7 @@ Cible: cookie de session
 Scénario d'attaque: 
 
 - Injection SQL
-
-On peut injecter `' or 1=1 --+` à la place du mot de passe lorsque l'on essaye de se login et l'on peut se connecter sans avoir le mot de passe
+  - Un attaquant peut injecter `' OR 1=1--` à la place du mot de passe lorsqu'il essaye de se login et peut se connecter sans avoir le mot de passe.
 
 - Voler un cookie de session PHP par défaut (PHPSESSID) avec une attaque XSS
 
