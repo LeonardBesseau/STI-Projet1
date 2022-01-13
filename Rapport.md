@@ -177,9 +177,7 @@ Cible: serveur web
 Scénario d'attaque: 
 
 - XSS
-  - Une injection XSS peut être faite dans le sujet ou le corps du message
-
-- Bug avec fuite de mémoire
+  - Une injection XSS peut être faite dans le sujet ou le corps du message pour rediriger sur une autre page, empêchant ainsi d'utiliser l'application. Selon sur quelle page l'utilisateur est redirigé, une boucle infinie peut être créée.
 
 Contrôles: Validation des entrées
 
@@ -207,7 +205,7 @@ Scénario d'attaque:
 
 - CSRF
 
-  - L'attaquant peut construire une attaque CSRF modifiant automatiquement le mot de passe de l'admin par un mot de passe voulu et par exemple envoyer un faux site web à l'admin par mail. Lorsque l'admin se cliquera sur ce site web malicieux, il sera redirigé sur le site web vulnérable et son mot de passe aura été modifié sans qu'il s'en aperçoive. L'attaquant pourra ensuite se connecter sur le compte de l'admin et accéder aux données de celui-ci.
+  - L'attaquant peut construire une attaque CSRF modifiant automatiquement le mot de passe d'un utilisateur par un mot de passe voulu et par exemple envoyer un faux site web à l'utilisateur par mail. Lorsque l'utilisateur se cliquera sur ce site web malicieux, il sera redirigé sur le site web vulnérable et son mot de passe aura été modifié sans qu'il s'en aperçoive. L'attaquant pourra ensuite se connecter sur le compte de l'admin et accéder aux données de celui-ci.
 
     ```php+HTML
     <form action="../logic/new_password.php" method="post">
@@ -222,21 +220,17 @@ Scénario d'attaque:
         </form>
     ```
 
-    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/password.php`. Il faut aussi y insérer l’émail de l'admin à qui l'on veut modifier le mot de passe. Il faut également ajouter un champ `value` et y mettre le mot de passe que l'on souhaite. À la fin, il faut y insérer une balise script contenant:
+    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/password.php`. Il faut aussi y insérer l’émail de l'utilisateur à qui l'on veut modifier le mot de passe. Il faut également ajouter un champ `value` et y mettre le mot de passe que l'on souhaite. À la fin, il faut y insérer une balise script contenant:
 
     ```php+HTML
     <script>document.forms[0].submit();<\script>
     ```
 
-    Lorsque l'admin ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
+    Lorsque l'utilisateur ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
 
-- Authentification+ Autorisation bypass
+- Accès arbitraire aux données
 
-  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
-
-- Modification du HTML
-
-  - Un employé connecté sur l'application web peut consulter n'importe quel message de la base de donnée en modifiant la valeur du message et en cliquant pour l'ouvrir
+  - Il est possible d'accéder à n'importe quel message sans restriction d'accès, même si le message ne nous est pas destiné. Les id des messages étant séquentiels, on peut tous les obtenir rapidement.
 
     ![image-20220109130818911](figures/image-20220109130818911.png)
 
@@ -264,19 +258,19 @@ Scénario d'attaque:
 
 - Injection SQL
 
-  - Avec une injection SQL, on peut supprimer tous les mails de la base de données. Pour ce faire, dans le code HTML de l'inbox, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
+  - Avec une injection SQL, on peut supprimer tous les mails de la base de données. Pour ce faire, l'attaquant connecté sur l'application web peut modifier la requête de suppression d'un mail de son choix en y ajoutant une requête SQL par exemple:
 
     ![image-20220109174352288](figures/image-20220109174352288.png)
 
-    345 étant un id non valable pour un mail. Lorsqu'il cliquera sur le bouton *delete*, tous les mails seront supprimés.
+    Lorsqu'il cliquera sur le bouton *delete*, tous les mails seront supprimés.
 
 - Autorisation bypass
 
-  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
+  - Un attaquant pourrait utiliser les techniques décrites dans vol de session pour obtenir une autre session et ensuite supprimer les messages.
 
 - Envoi d'une requête non-authentifié
 
-  - N'importe qui (même une personne non-connectée) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requête faite par le formulaire.
+  - N'importe qui (même une personne non-connectée) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requête directement.
 
     ![image-20220109130943771](figures/image-20220109130943771.png)
 
@@ -302,7 +296,7 @@ Scénario d'attaque:
 
 - Injection SQL
 
-  - Avec une injection SQL, il est possible de modifier les mots de passes de toute la base de données. Il suffit à l'attaquant connecté sur l'application web d'aller dans *Change password* puis de modifier l'HTML avec faux utilisateur et l'injection puis de changer le mot de passe. Par exemple:
+  - Avec une injection SQL, il est possible de modifier les mots de passes de toute la base de données. Il suffit d'effectuer la requête pour modifier un mot de passe avec une injection dans le nom d'utilisateur pour changer les mot de passe. Par exemple:
 
     ![image-20220109182544109](figures/image-20220109182544109.png)
 
@@ -318,11 +312,11 @@ Scénario d'attaque:
 
 - Autorisation bypass
 
-  - Il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple ou une injection
+  - Un attaquant pourrait utiliser les techniques décrites dans vol de session pour obtenir une autre session et ensuite supprimer les messages.
 
-- Modification du HTML
+- Modification du mot de passe d'un autre utilisateur
 
-  - Un attaquant connecté sur l'application web peut modifier dans l'HTML le mot de passe de n'importe quel utilisateur. Pour ce faire, il lui suffit de modifier l'email et de choisir le mot de passe qu'il veut. Par exemple:
+  - Un attaquant peut modifier le mot de passe d'un utilisateur arbitraire. Pour ce faire, il lui suffit de modifier l'email et de choisir le mot de passe qu'il veut. Par exemple:
 
     ![image-20220109183937269](figures/image-20220109183937269.png)
 
@@ -349,7 +343,7 @@ Scénario d'attaque:
 - Tests de mots de passe simple (ex: 123) car aucune vérification
   - L'attaquant peut tester une liste de mot de passe récurrents à l'aide d'un outil car lors de la création d'un compte ou lors du changement du mot de passe, il n'est pas demandé que celui-ci comporte un nombre minimum de caractères, de chiffres ou de caractères spéciaux.
 
-- Tests de différents mots de passe autant de fois que l'on veut
+- Pas de limite d'essai de mot de passe
   - L'attaquant peut tester n'importe quel mot de passe à volonté à l'aide d'un outil.
 
 
@@ -419,6 +413,8 @@ Il peut ensuite remplacer son propre cookie de session par le cookie de session 
 
 - Attaque CSRF
   - Voir le point **Récupération de données internes** 
+- Vol de token
+  - Comme la communication n'utilise pas HTTPS, il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple comme décrit dans le scénario 6.
 
 Contrôles: 
 
@@ -514,7 +510,7 @@ dire ce qui a été ajouté/modifié dans quel fichier... et en quoi ça résout
 
 
 
-
+- mettre à jour la version de jquery et php, mettre les librairies à jour
 
 - Valider les inputs lors des requêtes
 - Utiliser des requêtes SQL préparées
