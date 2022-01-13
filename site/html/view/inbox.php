@@ -44,15 +44,18 @@ $email = $_SESSION['email'];
 
                     <div class="message_action">
                         <form action="./read_message.php" method="post">
+                            <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
                             <input type="hidden" name="id" value="<?= $message['id'] ?>"/>
                             <input type="submit" class="button_open" value="open"/>
                         </form>
                         <form action="./reply_message.php" method="post">
+                            <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
                             <input type="hidden" name="recipient" value="<?= $message['sender'] ?>"/>
                             <input type="hidden" name="subject" value="<?= $message['subject'] ?>"/>
                             <input type="submit" class="button_open" value="reply"/>
                         </form>
                         <form action="../logic/action_delete_message.php" method="post">
+                            <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
                             <input type="hidden" name="id" value="<?= $message['id'] ?>"/>
                             <input type="submit" class="button_open" value="delete"/>
                         </form>

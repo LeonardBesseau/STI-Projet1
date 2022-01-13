@@ -9,6 +9,12 @@ if (!(isset($_SESSION['email']))) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    if (!$token || $token !== $_SESSION['token']) {
+        // return 405 http status code
+        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
+    }
     $id = $_POST['id'];
 
     try {

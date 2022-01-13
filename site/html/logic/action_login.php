@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 session_start();
                 $_SESSION['email'] = $result['email'];
                 $_SESSION['is_admin'] = $result['is_admin'];
+                $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
                 header('Location: ../view/inbox.php');
             } else {
                 //redirect to login page

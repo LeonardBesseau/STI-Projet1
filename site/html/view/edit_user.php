@@ -19,6 +19,7 @@ $value = $_GET['email'];
     <h2 class="title">Edit user</h2>
 
     <form action="../logic/modify_user.php" method="post">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
         <div class="form_container">
             <label for="email"><b>Email</b></label>
             <input type="text" name="email" readonly class="form-control" value="<?= $value ?>" " >

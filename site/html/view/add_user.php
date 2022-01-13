@@ -18,6 +18,7 @@ include 'navigation.php';
 
     <form action="../logic/new_user.php" method="post">
         <div class="form_container">
+            <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
             <label for="email"><b>Email</b></label>
             <input type="email" placeholder="Enter Email" name="email" required>
 

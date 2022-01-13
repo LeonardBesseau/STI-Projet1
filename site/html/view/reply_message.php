@@ -19,6 +19,7 @@ $subject = $_POST['subject'];
     <h2 class="title">My response</h2>
 
     <form action="../logic/action_send_message.php" method="post">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
         <div class="form_container">
             <label for="email"><b>To: <?= $recipient ?></b></label>
             <input type="hidden" name="recipient" value="<?= $recipient ?>"/>

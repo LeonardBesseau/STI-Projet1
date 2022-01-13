@@ -16,6 +16,7 @@ include 'navigation.php';
     <h2 class="title">Message</h2>
 
     <form action="../logic/action_send_message.php" method="post">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
         <div class="form_container">
 
             <label for="email"><b>To</b></label>

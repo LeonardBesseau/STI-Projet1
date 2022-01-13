@@ -16,6 +16,7 @@ include 'navigation.php';
     <h2 class="title">Change password</h2>
 
     <form action="../logic/new_password.php" method="post">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
         <div class="form_container">
             <label for="email"><b>Email</b></label>
             <input type="text" name="email" readonly class="form-control" value="<?= $_SESSION['email'] ?>" " >
