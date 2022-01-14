@@ -1,11 +1,10 @@
 <?php
-include '../db_connect.php';
 include '../logic/session.php';
+include '../db_connect.php';
 include 'navigation.php';
 
 ?>
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,6 +22,13 @@ include 'navigation.php';
 
             <label for="psw"><b>New password</b></label>
             <input type="password" placeholder="Enter new password" name="pswd" required>
+            <?php if (isset($_SESSION['error']) && !empty($_SESSION['error'])) : ?>
+                <div class="alert alert-danger">
+                    <?php echo $_SESSION['error'];
+                    $_SESSION['error'] = '';
+                    ?>
+                </div>
+            <?php endif; ?>
             <button type="submit">Change</button>
         </div>
     </form>

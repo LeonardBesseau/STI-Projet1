@@ -13,7 +13,6 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
 }
 
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
@@ -31,19 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($file_db)) {
         //query to add user
-        $sql = $file_db->prepare("INSERT INTO users VALUES (:email,:password,:active,:admin)");
-        $htmlspecialchars = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-        $sql->bindParam('email', $htmlspecialchars);
-        $sql->bindParam('password', $password);
-        $sql->bindParam('active', $active);
-        $sql->bindParam('admin', $admin);
-        $result = $sql->execute();
+        if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#", $password)) {
+            $sql = $file_db->prepare("INSERT INTO users VALUES (:email,:password,:active,:admin)");
+            $htmlspecialchars = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('email', $htmlspecialchars);
+            $sql->bindParam('password', $password);
+            $sql->bindParam('active', $active);
+            $sql->bindParam('admin', $admin);
+            $result = $sql->execute();
 
-        //verify if the user is valid and activ
-        if (!empty($result)) {
-            header('Location: ../view/users.php');
+            //verify if the user is valid and activ
+            if (!empty($result)) {
+                header('Location: ../view/users.php');
+            } else {
+                echo "Problem";
+            }
         } else {
-            echo "Problem";
+            $_SESSION['error'] = "Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.";
+            header('Location: ../view/add_user.php');
         }
     } else {
         echo 'Error: unable to connect to database';

@@ -1,6 +1,7 @@
 <?php
-include '../db_connect.php';
 include '../logic/session.php';
+include '../db_connect.php';
+
 include '../logic/is_admin.php';
 include 'navigation.php';
 
@@ -26,6 +27,13 @@ $value = $_GET['email'];
 
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="pswd">
+            <?php if (isset($_SESSION['error']) && !empty($_SESSION['error'])) : ?>
+                <div class="alert alert-danger">
+                    <?php echo $_SESSION['error'];
+                    $_SESSION['error'] = '';
+                    ?>
+                </div>
+            <?php endif; ?>
 
             <label for="active"><b>Active?</b></label>
             <select name="active">
