@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 12.01.2022
+Date: 14.01.2022
 
 
 
@@ -177,7 +177,7 @@ Cible: serveur web
 Scénario d'attaque: 
 
 - XSS
-  - Une injection XSS peut être faite dans le sujet ou le corps du message pour rediriger sur une autre page, empêchant ainsi d'utiliser l'application. Selon sur quelle page l'utilisateur est redirigé, une boucle infinie peut être créée.
+  - Une injection XSS peut être faite dans le sujet ou le corps du message pour rediriger sur une autre page, empêchant ainsi d'utiliser l'application. Selon sur quelle page l'utilisateur est redirigé, une boucle infinie peut être créée. Il suffit à l'attaquant d'envoyer un message à un autre utilisateur (non admin) en mettant dans le sujet du message par exemple: `<script>window.location.href="http://www.localhost:8080/logic/delete_user.php";</script>`. Cela redirigera l'utilisateur allant sur sa boîte mail directement sur la page gérant les utilisateurs mais celle-ci n'est pas accessible à un simple utilisateur donc il sera redirigé sur sa boîte mail, ceci en boucle.
 
 Contrôles: Validation des entrées
 
@@ -505,6 +505,8 @@ Contrôles:
 ### Politique de mots de passe
 
 Concerne: scénario 5 et 9
+
+Une politique de mot de passe a été instaurée. Le mot de passe doit faire au minimum 8 caractères, 1 minuscule, 1 majuscule et 1 chiffre.
 
 dire ce qui a été ajouté/modifié dans quel fichier... et en quoi ça résout le problème
 
