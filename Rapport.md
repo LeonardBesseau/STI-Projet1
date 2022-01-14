@@ -508,12 +508,29 @@ Concerne: scénario 5 et 9
 
 Une politique de mot de passe a été instaurée. Le mot de passe doit faire au minimum 8 caractères, 1 minuscule, 1 majuscule et 1 chiffre.
 
+### Protection CSRF
+
+Concerne: 2,4,7,8
+
+Un token anti-csrf est généré lors de la création de la session. Ce token est envoyé avec chaque formulaire et est validé par le serveur.
+
+### Protection XSS
+
+Concerne: 1,7
+
+Les éléments contrôlables par les utilisateurs (message, sujet, nom d'utilisateurs) qui seront affichés sont convertis par la fonction `htmlspecialchars` pour empêcher l’exécution de script JS en enlevant les caractères spéciaux.
+
+### Protection injection SQL
+
+Concerne: 2,3,4,7
+
+Les query SQL utilisent désormais des prepareds statements à la place de simple concaténation.
+
 dire ce qui a été ajouté/modifié dans quel fichier... et en quoi ça résout le problème
 
 
 
 - mettre à jour la version de jquery et php, mettre les librairies à jour
-
 - Valider les inputs lors des requêtes
 - Utiliser des requêtes SQL préparées
 - Contrôle d'accès pour les messages et les données utilisateurs
