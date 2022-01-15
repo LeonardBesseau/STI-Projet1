@@ -1,12 +1,16 @@
 # STI - Projet 2
 
-Auteurs: Alexandra Cerottini & Besseau Léonard
+Auteurs: Besseau Léonard et Cerottini Alexandra
+
+Date: 15.01.2022
+
+Repo projet 1: https://github.com/Insuline13/STI-Projet1
 
 
 
 ## Introduction
 
-Ce projet est une application Web très simple permettant d'envoyer des messages entre des collaborateurs.
+Ce projet est une application Web très simple et sécurisée permettant d'envoyer des messages entre des collaborateurs.
 
 Les technologies utilisées sont Docker, PHP et SQLite.
 
@@ -20,19 +24,19 @@ Cloner l'archive Github avec la commande `git clone git@github.com:Insuline13/ST
 
 ## Lancement
 
-Une image Docker contenant un serveur Nginx, PHP et SQLite est utilisée. Si l'image Docker n'existe pas, il faut au préalable lancer la commande suivante:
+Une image Docker contenant un serveur Nginx, PHP et SQLite est utilisée. Si l'image Docker n'existe pas, il faut au préalable lancer la commande suivante à la racine du repository:
 
 ```shell
 docker run -ti -v "$PWD/site":/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
 ```
 
-Il suffit ensuite de lancer le script `script_strating.sh` dans le dossier `site`. 
+Il faut ensuite lancer le script `script_strating.sh` dans le dossier `site`. 
 
 ```sh
 ./script_starting.sh
 ```
 
-Il suffit ensuite d'aller dans le navigateur et d'écrire `localhost:8080` pour accéder à l'application web.
+Il suffit ensuite d'aller dans le navigateur sur `localhost:8080` pour accéder à l'application web.
 
 
 
@@ -46,10 +50,10 @@ Pour se connecter, il suffit d'entrer un email et un mot de passe et de cliquer 
 
 L'un des comptes suivant peut-être utilisé:
 
-| email            | mot de passe | statut        |
-| ---------------- | ------------ | ------------- |
-| admin@sti.com    | 123          | admin         |
-| ladygaga@sti.com | 911          | collaborateur |
+| email            | mot de passe     | statut        |
+| ---------------- | ---------------- | ------------- |
+| admin@sti.com    | _LmyZ+A4J%ZX,T`t | admin         |
+| ladygaga@sti.com | Pokerf@ce911     | collaborateur |
 
 ![login](images/login.png)
 
@@ -103,7 +107,7 @@ En cliquant sur `Add user` une nouvelle page s'ouvre et un nouvel utilisateur pe
 
 #### Modifier
 
-En cliquant sur `Edit` une nouvelle page s'ouvre et le mot de passe, la validité ou le rôle de l'utilisateur peut-être modifié. Il suffit de modifier les champs souhaités puis de cliquer sur `Ok`. Lorsque l'opération a été réalisée, l'utilisateur est redirigé sur la page de gestion des utilisateurs.
+En cliquant sur `Edit`, une nouvelle page s'ouvre et le mot de passe, la validité et/ou le rôle de l'utilisateur peuvent être modifiés. Il suffit de modifier les champs souhaités puis de cliquer sur `Ok`. Lorsque l'opération a été réalisée, l'utilisateur est redirigé sur la page de gestion des utilisateurs.
 
 ![edit_user](images/edit_user.png)
 

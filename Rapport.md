@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 14.01.2022
+Date: 15.01.2022
 
 
 
@@ -201,7 +201,7 @@ Scénario d'attaque:
 
     ![image-20220109171551344](figures/image-20220109171551344.png)
 
-    Lorsqu'il cliquera sur le bouton *open*, le premier mail de la base de donnée s'affichera alors que celui-ci ne lui était pas destiné.
+    Lorsqu'il cliquera sur le bouton *open*, le premier mail de la base de donnée s'affichera alors que celui-ci ne lui était pas destiné. Il faut noter également que les id des messages sont séquentiels.
 
 - CSRF
 
@@ -349,7 +349,7 @@ Scénario d'attaque:
 
 Contrôles: 
 
-- Mettre en place un mot de passe fort (au moins 8 caractères avec 1 chiffre et 1 caractère spécial)
+- Mettre en place un mot de passe fort (au moins 8 caractères avec au moins 1 chiffre, 1 majuscule, 1 minuscule et 1 caractère spécial)
 - Limiter le nombre de tentatives de login
 
 #### Scénario 6: Vol de mot de passe
@@ -504,37 +504,138 @@ Contrôles:
 
 ### Politique de mots de passe
 
-Concerne: scénario 5 et 9
+Concerne: scénario 5
 
-Une politique de mot de passe a été instaurée. Le mot de passe doit faire au minimum 8 caractères, 1 minuscule, 1 majuscule et 1 chiffre.
+Une politique de mot de passe a été instaurée. Le mot de passe doit faire au minimum 8 caractères (et au maximum 20 caractères). Il doit également contenir 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial.
+
+Pour ce faire, le code suivant a été utilisé:
+
+```php
+if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#", $password)){
+	[......]
+} else {
+            $_SESSION['error'] = "Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.";
+        }
+```
+
+Il a été ajouté dans les fichiers `modify_user.php`, `new_password.php` et `new_user.php` car ce sont les 3 endroits où un mot de passe peut être défini.
+
+
+
+### Limiter le nombre de tentatives de login
+
+A FAIRE
+
+
+
+### Identifiants de sessions 
+
+???? maybe avec session_regenerate_id()
+
+
+
+### Hachage de mots de passe
+
+
+
+### Mot de passe de la base de donnée fort
+
+A FAIRE
+
+
+
+### CAPTCHA
+
+A FAIRE
+
+
 
 ### Protection CSRF
 
-Concerne: 2,4,7,8
+Concerne: scénarios 2, 4, 7, 8
 
 Un token anti-csrf est généré lors de la création de la session. Ce token est envoyé avec chaque formulaire et est validé par le serveur.
 
+Pour créer le token dans le fichier `action_login.php`:
+
+```php
+$_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+```
+
+Pour renvoyer un token dans un formulaire:
+
+```php
+<input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?>">
+```
+
+Le code ci-dessus a été ajouté dans les fichiers `add_user.php`, `edit_user.php`, `inbox.php`, `new_message.php`, `password.php` et `reply_message.php`. 
+
+Pour que le serveur valide le token:
+
+```php
+$token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    if (!$token || $token !== $_SESSION['token']) {
+        // return 405 http status code
+        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        exit;
+    }
+```
+
+Le code ci-dessus a été ajouté dans les fichiers `action_delete_message.php`, `action_send_message.php`, `delete_user.php`, `modify_user.php`, `new_password.php` et `new_user.php`.
+
+
+
 ### Protection XSS
 
-Concerne: 1,7
+Concerne: scénarios 1 et 7
 
 Les éléments contrôlables par les utilisateurs (message, sujet, nom d'utilisateurs) qui seront affichés sont convertis par la fonction `htmlspecialchars` pour empêcher l’exécution de script JS en enlevant les caractères spéciaux.
 
+Par exemple:
+
+```php
+            $htmlspecialchars = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('subject', $htmlspecialchars);
+            $htmlspecialchars = htmlspecialchars($body, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('body', $htmlspecialchars);
+```
+
+Ce code a été ajouté dans les fichiers `send_messages.php` et `new_user.php`.
+
+
+
 ### Protection injection SQL
 
-Concerne: 2,3,4,7
+Concerne: scénarios 2, 3, 4, 7
 
 Les query SQL utilisent désormais des prepareds statements à la place de simple concaténation.
 
-dire ce qui a été ajouté/modifié dans quel fichier... et en quoi ça résout le problème
+Par exemple:
+
+```php
+        $sql = $file_db->prepare("SELECT * FROM messages WHERE id = :id AND recipient = :email");
+        $sql->bindParam('email', $email);
+        $sql->bindParam('id', $id);
+        $sql->execute();
+```
+
+Ce code a été ajouté dans les fichiers `inbox.php`, `read_message.php`, `delete_user.php`, `modify_user.php`, `new_password.php` et `new_user.php`. 
 
 
 
-- mettre à jour la version de jquery et php, mettre les librairies à jour
-- Valider les inputs lors des requêtes
-- Utiliser des requêtes SQL préparées
-- Contrôle d'accès pour les messages et les données utilisateurs
-- Contrôle d'accès pour les fonctionnalités de l'administrateur
+### Version des logiciels
+
+:warning: Pas réalisé
+
+Il faudrait mettre à jour les différents logiciels.
+
+### HTTPS
+
+:warning: Pas réalisé
+
+Concerne: scénario 6 et 7
+
+Il faudrait que l'application web soit uniquement utilisable en HTTPS. Pour ce faire, il faudrait générer un certificat HTTPS (ou SSL).
 
 
 
