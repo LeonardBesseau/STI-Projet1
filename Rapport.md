@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 15.01.2022
+Date: 16.01.2022
 
 
 
@@ -546,7 +546,7 @@ A FAIRE
 
 ### CAPTCHA
 
-A FAIRE
+Limiter la vitesse du bruteforce donc c'est trop long et les attaquants vont abandonner.
 
 
 
@@ -635,7 +635,7 @@ Il faudrait mettre à jour les différents logiciels.
 
 Concerne: scénario 6 et 7
 
-Il faudrait que l'application web soit uniquement utilisable en HTTPS. Pour ce faire, il faudrait générer un certificat HTTPS (ou SSL).
+Il faudrait que l'application web soit uniquement utilisable en HTTPS. Pour ce faire, il faudrait générer un certificat HTTPS.
 
 
 
