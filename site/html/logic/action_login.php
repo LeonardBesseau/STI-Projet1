@@ -9,20 +9,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['g-recaptcha-response'
 
     try {
         $secret = '6LcMMRYeAAAAAPdcZI7JQ1j-cM5ury_SRU3phglw';
-        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . $_POST['g-recaptcha-response']);
         $responseData = json_decode($verifyResponse);
 
         //verify captcha
         if ($responseData->success) {
             if (isset($file_db)) {
                 //query to fetch user
-                $sql = $file_db->prepare("SELECT * FROM users WHERE email = :email and password = :password");
-                $sql->bindParam('password', $password);
+                $sql = $file_db->prepare("SELECT * FROM users WHERE email = :email AND is_activ");
                 $sql->bindParam('email', $email);
                 $sql->execute();
                 $result = $sql->fetch();
+                $hashed_password = $result["password"];
                 //verify if the user is valid and activ
-                if (!empty($result) && $result['is_activ']) {
+                if (!empty($result) && password_verify($password, $hashed_password)) {
                     //create session and redirect to user inbox
                     session_start();
                     $_SESSION['email'] = $result['email'];

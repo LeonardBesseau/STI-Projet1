@@ -26,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 error_reporting(E_ALL);
                 ini_set("display_errors", 1);
                 $sql = $file_db->prepare("UPDATE users SET password=:password WHERE email=:email");
-                $sql->bindParam('password', $password);
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $sql->bindParam('password', $hash);
                 $sql->bindParam('email', $email);
                 $result = $sql->execute();
                 header('Location: ../view/inbox.php');
