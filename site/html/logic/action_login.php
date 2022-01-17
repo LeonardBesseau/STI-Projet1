@@ -8,11 +8,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['g-recaptcha-response'
     $password = $_POST['pswd'];
 
     try {
-        $secret = '6LcMMRYeAAAAAPdcZI7JQ1j-cM5ury_SRU3phglw';
+        $secret = '6LcMMRYeAAAAAPdcZI7JQ1j-cM5ury_SRU3phglw'; //challenge for reCAPTCHA
+        //verify challenge
         $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . $_POST['g-recaptcha-response']);
         $responseData = json_decode($verifyResponse);
 
-        //verify captcha
+        //verify reCAPTCHA
         if ($responseData->success) {
             if (isset($file_db)) {
                 //query to fetch user
