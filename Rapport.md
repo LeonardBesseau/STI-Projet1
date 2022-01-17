@@ -199,15 +199,15 @@ Scénario d'attaque:
 
   - Avec une injection SQL, on peut afficher le premier mail de la base de données. En effectuant une requête pour lire un message, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
 
-    ![image-20220109171551344](figures/image-20220109171551344.png)
+    ![scenario2_sql](figures/scenario2_sql.png)
 
-    le résultat sera le premier mail de la base de donnée alors qu'il est possible que celui-ci ne lui était pas destiné. Il faut noter également que les id des messages sont séquentiels.
+    Le résultat sera le premier mail de la base de donnée alors qu'il est possible que celui-ci ne lui était pas destiné. Il faut noter également que les id des messages sont séquentiels.
 
 - Accès arbitraire aux données
 
   - Il est possible d'accéder à n'importe quel message sans restriction d'accès, même si le message ne nous est pas destiné. Les id des messages étant séquentiels, on peut tous les obtenir rapidement.
 
-    ![image-20220109130818911](figures/image-20220109130818911.png)
+    ![scenario2_data](figures/scenario2_data.png)
 
 
 Contrôles: 
@@ -233,7 +233,7 @@ Scénario d'attaque:
 
   - Avec une injection SQL, on peut supprimer tous les mails de la base de données. Pour ce faire, l'attaquant connecté sur l'application web peut modifier la requête de suppression d'un mail de son choix en y ajoutant une requête SQL par exemple:
 
-    ![image-20220109174352288](figures/image-20220109174352288.png)
+    ![scenario3_sql](figures/scenario3_sql.png)
 
     Lorsqu'il effectuera la requête, tous les mails seront supprimés.
 
@@ -245,7 +245,7 @@ Scénario d'attaque:
 
   - N'importe qui (même une personne non-connectée) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requête directement.
 
-    ![image-20220109130943771](figures/image-20220109130943771.png)
+    ![scenario3_data](figures/scenario3_data.png)
 
 Contrôles: 
 
@@ -271,11 +271,11 @@ Scénario d'attaque:
 
   - Avec une injection SQL, il est possible de modifier les mots de passe de toute la base de données. Il suffit d'effectuer la requête pour modifier un mot de passe avec une injection dans le nom d'utilisateur pour changer les mots de passe. Par exemple:
 
-    ![image-20220109182544109](figures/image-20220109182544109.png)
+    ![scenario4_sql](figures/scenario4_sql.png)
 
     Nous pouvons voir sur *phpliteadmin* que tous les utilisateurs ont les mêmes mots de passe
 
-    ![image-20220109182643042](figures/image-20220109182643042.png)
+    ![scenario4_db](figures/scenario4_db.png)
 
     L'attaquant peut donc accéder à tous les comptes.
 
@@ -293,7 +293,7 @@ Scénario d'attaque:
 
   - Un attaquant peut modifier le mot de passe d'un utilisateur arbitraire. Pour ce faire, il lui suffit de modifier l'email et de choisir le mot de passe qu'il veut. Par exemple:
 
-    ![image-20220109183937269](figures/image-20220109183937269.png)
+    ![scenario4_data](figures/scenario4_data.png)
 
 
 Contrôles: 
@@ -346,7 +346,7 @@ Scénario d'attaque:
 
   - Les informations transitent en clair sur le réseau donc lorsqu'un utilisateur se connecte à son compte, une autre personne se trouvant sur le même réseau peut sniffer le trafic et récupérer les credentials de cet utilisateur.
 
-    ![image-20220109125112329](figures/image-20220109125112329.png)
+    ![Wireshark](figures/wireshark.png)
 
 
 Contrôles: 
@@ -374,15 +374,15 @@ Scénario d'attaque:
 
   - Grâce à [Requestbin](https://requestbin.net/) (un site nous permettant de récupérer des requêtes), un attaquant peut voler le cookie de session de l'admin. Pour ce faire, il lui suffit d'envoyer un mail contenant une attaque XSS à l'admin (l'attaque peut être réalisé dans le subject ou dans le message).
 
-    <img src="figures/image-20220109115433349.png" alt="image-20220109115433349" style="zoom: 67%;" />
+    <img src="figures/envoi.png" alt="envoi" style="zoom: 67%;" />
 
     Lorsque l'admin ouvrira le message il ne verra rien d'anormal mais l'attaque XSS aura été réalisée.
 
-    <img src="figures/image-20220109115844446.png" alt="image-20220109115844446" style="zoom:67%;" />
+    <img src="figures/reception.png" alt="reception" style="zoom:67%;" />
 
     Sur RequestBin, l'attaquant peut récupérer le cookie de session de l'admin.
 
-    <img src="figures/image-20220108234312574.png" alt="image-20220108234312574" style="zoom:67%;" />
+    <img src="figures/requestBin.png" alt="requestBin" style="zoom:67%;" />
 
 
 Il peut ensuite remplacer son propre cookie de session par le cookie de session de l'admin. Il aura réussi à prendre possession du compte de l'administrateur.
