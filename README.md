@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 15.01.2022
+Date: 17.01.2022
 
 Repo projet 1: https://github.com/Insuline13/STI-Projet1
 
@@ -46,7 +46,7 @@ Il suffit ensuite d'aller dans le navigateur sur `localhost:8080` pour accéder 
 
 Lorsqu'un utilisateur n'est pas connecté, il se retrouvera face à une page de login.
 
-Pour se connecter, il suffit d'entrer un email et un mot de passe et de cliquer sur `Login`. Si les informations entrées ne sont pas valides, l'utilisateur se retrouvera à nouveau sur la page de login. Sinon, il se retrouvera dans sa boîte mail.
+Pour se connecter, il suffit d'entrer un email, un mot de passe, de valider le reCAPTCHA et de cliquer sur `Login`. Si les informations entrées ne sont pas valides ou que le reCAPTCHA est incorrect, l'utilisateur se retrouvera à nouveau sur la page de login. Sinon, il se retrouvera dans sa boîte mail.
 
 L'un des comptes suivant peut-être utilisé:
 
@@ -55,7 +55,7 @@ L'un des comptes suivant peut-être utilisé:
 | admin@sti.com    | _LmyZ+A4J%ZX,T`t | admin         |
 | ladygaga@sti.com | Pokerf@ce911     | collaborateur |
 
-![login](images/login.png)
+![image-20220117232319052](figures/image-20220117232319052.png)
 
 ### Barre de navigation
 
@@ -89,7 +89,7 @@ L'utilisateur peut également envoyer un nouveau message en cliquant sur le bout
 
 ### Changer de mot de passe
 
-Cette page permet à l'utilisateur actuel de changer son mot de passe. Il lui suffit d'entrer un nouveau mot de passe et de cliquer sur `Change` pour que celui-ci soit changé. Lorsque le changement a été effectué, l'utilisateur est dirigé sur sa boîte mail.
+Cette page permet à l'utilisateur actuel de changer son mot de passe. Il lui suffit d'entrer un nouveau mot de passe respectant la politique de mot de passe (entre 8 et 20 caractères contenant au minimum 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial) et de cliquer sur `Change` pour que celui-ci soit changé. Lorsque le changement a été effectué, l'utilisateur est dirigé sur sa boîte mail.
 
 ![pswd](images/pswd.png)
 
