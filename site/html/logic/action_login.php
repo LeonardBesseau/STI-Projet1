@@ -1,5 +1,7 @@
 <?php
+session_start();
 include '../db_connect.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['g-recaptcha-response'])) {
 
@@ -22,22 +24,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['g-recaptcha-response'
                 $sql->execute();
                 $result = $sql->fetch();
                 $hashed_password = $result["password"];
+
                 //verify if the user is valid and activ
                 if (!empty($result) && password_verify($password, $hashed_password)) {
                     //create session and redirect to user inbox
-                    session_start();
                     $_SESSION['email'] = $result['email'];
                     $_SESSION['is_admin'] = $result['is_admin'];
                     $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
                     header('Location: ../view/inbox.php');
                 } else {
-                    //redirect to login page
+                    $_SESSION['error'] = "Wrong email or password or user is disabled";
                     header('Location: ../view/login.php');
                 }
             } else {
                 echo 'Error: unable to connect to database';
+                echo '<br/><a href="../view/login.php">Return</a>';
             }
         } else {
+            $_SESSION['error'] = "reCAPTCHA error";
             header('Location: ../view/login.php');
         }
     } catch (PDOException $e) {
@@ -45,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['g-recaptcha-response'
         $file_db = null;
     }
 } else {
+    $_SESSION['error'] = "reCAPTCHA error";
     header('Location: ../view/login.php');
 }
 
