@@ -79,7 +79,7 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
 ### DFD
 
-![DFD](images/DFD.png)
+![DFD](figures/DFD.png)
 
 
 
