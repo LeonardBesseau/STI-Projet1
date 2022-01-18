@@ -28,12 +28,12 @@ $id = $_POST['id'];
 
         <div class="message_container">
             <div class="message">
-            <p class="sender">From: <?= $message['sender'] ?></p>
-            <div class="message_info">
-                <p class="subject">Subject: <?= $message['subject'] ?></p>
-                <p><?= $message['date'] ?></p>
-            </div>
-            <p><?= $message['body'] ?></p>
+                <p class="sender">From: <?= $message['sender'] ?></p>
+                <div class="message_info">
+                    <p class="subject">Subject: <?= $message['subject'] ?></p>
+                    <p><?= $message['date'] ?></p>
+                </div>
+                <p><?= $message['body'] ?></p>
             </div>
         </div>
 

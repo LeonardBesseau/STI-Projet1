@@ -9,10 +9,11 @@ if (!(isset($_SESSION['email']))) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //csrf protection
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
     if (!$token || $token !== $_SESSION['token']) {
-        // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        $_SESSION['error'] = "Not allowed";
+        header('Location: ../view/inbox.php');
         exit;
     }
     $id = $_POST['id'];
@@ -26,6 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql->execute();
             //redirect to inbox
             header('Location: ../view/inbox.php');
+        } else {
+            echo 'Error: unable to connect to database';
+            echo '<br/><a href="../view/inbox.php">Return</a>';
         }
     } catch (PDOException $e) {
         // Close file database.sqlite connection

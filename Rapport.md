@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 17.01.2022
+Date: 18.01.2022
 
 
 
@@ -475,16 +475,6 @@ Pour ce faire, la solution clé en main de [reCAPTCHA](https://www.google.com/re
 
 
 
-### Identifiants de sessions 
-
-strict mode
-
-
-
-### HTTPONLY
-
-
-
 ### Hachage de mots de passe
 
 Afin de garantir la sécurité même en cas de hack, nous avons décider de hacher les mots de passe.
@@ -577,6 +567,8 @@ Ce code a été ajouté dans les fichiers `inbox.php`, `read_message.php`, `dele
 
 Il faudrait mettre à jour les différents logiciels (nginx, jquery, php). NGINX dans notre projet possède la version 1.4.6 et PHP possède la version 5.5.9. Des failles existent sur ces versions.
 
+
+
 ### HTTPS
 
 :warning: Pas réalisé
@@ -584,6 +576,20 @@ Il faudrait mettre à jour les différents logiciels (nginx, jquery, php). NGINX
 Concerne: scénario 6 et 7
 
 Il faudrait que l'application web soit uniquement utilisable en HTTPS. Pour ce faire, il faudrait générer un certificat HTTPS.
+
+
+
+### Identifiants de sessions et HTTPONLY
+
+:warning: Pas réalisé
+
+Pour renforcer les identifiants de sessions, il serait intéressant d'activer le `strict mode`. Ceci permettrait également de mettre plus facilement en place les cookies en HTTPONLY. Ce paramètre permet d'éviter que les cookies soient récupérés par une injection JavaScript. 
+
+Documentation:
+
+https://wiki.php.net/rfc/secure-session-options-by-default
+
+https://www.php.net/manual/en/session.security.ini.php
 
 
 

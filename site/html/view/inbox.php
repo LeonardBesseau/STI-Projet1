@@ -22,6 +22,13 @@ $email = $_SESSION['email'];
         <h2 class="title">My inbox</h2>
         <button type="button" onclick="window.location.href='./new_message.php'">New message</button>
     </div>
+    <?php if (isset($_SESSION['error']) && !empty($_SESSION['error'])) : ?>
+        <div class="alert alert-danger">
+            <?php echo $_SESSION['error'];
+            $_SESSION['error'] = '';
+            ?>
+        </div>
+    <?php endif; ?>
 
     <?php
     if (isset($file_db)) {

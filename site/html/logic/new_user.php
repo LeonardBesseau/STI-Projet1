@@ -14,11 +14,11 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] != true) {
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    //csrf protection
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
     if (!$token || $token !== $_SESSION['token']) {
-        // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        $_SESSION['error'] = "Not allowed";
+        header('Location: ../view/add_user.php');
         exit;
     }
 
@@ -66,5 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         echo 'Error: unable to connect to database';
+        echo '<br/><a href="../view/users.php">Return</a>';
     }
 }

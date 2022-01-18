@@ -13,18 +13,17 @@ $sender = $_SESSION['email'];
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //csrf protection
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
     if (!$token || $token !== $_SESSION['token']) {
-        // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        $_SESSION['error'] = "Not allowed";
+        header('Location: ../view/inbox.php');
         exit;
     }
     // get variables
     $recipient = $_POST['recipient'];
     $subject = $_POST['subject'];
-    echo $subject;
     $subject = str_replace("'", "''", $subject);
-    echo $subject;
     $body = $_POST['body'];
     $body = str_replace("'", "''", $body);
     date_default_timezone_set('Europe/Zurich');

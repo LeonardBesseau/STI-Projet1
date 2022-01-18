@@ -8,10 +8,11 @@ if (!(isset($_SESSION['email']))) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //csrf protection
     $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
     if (!$token || $token !== $_SESSION['token']) {
-        // return 405 http status code
-        header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+        $_SESSION['error'] = "Not allowed";
+        header('Location: ../view/password.php');
         exit;
     }
 
@@ -31,6 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sql->bindParam('email', $email);
                 $result = $sql->execute();
                 header('Location: ../view/inbox.php');
+            } else {
+                echo 'Error: unable to connect to database';
+                echo '<br/><a href="../view/users.php">Return</a>';
             }
         } else {
             $_SESSION['error'] = "Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character.";

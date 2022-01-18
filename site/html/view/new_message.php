@@ -21,20 +21,20 @@ include 'navigation.php';
 
             <label for="email"><b>To</b></label>
             <select name="recipient">
-            <?php
-            if (isset($file_db)) {
-                // query to fetch users messages
-                $sql = $file_db->prepare("SELECT email FROM users");
-                $sql->execute();
-                // display users messages
-                foreach ($sql->fetchAll() as $result) {
-            ?>
-                <option value="<?= $result['email'] ?>"><?= $result['email'] ?></option>
-            <?php
+                <?php
+                if (isset($file_db)) {
+                    // query to fetch users messages
+                    $sql = $file_db->prepare("SELECT email FROM users");
+                    $sql->execute();
+                    // display users messages
+                    foreach ($sql->fetchAll() as $result) {
+                        ?>
+                        <option value="<?= $result['email'] ?>"><?= $result['email'] ?></option>
+                        <?php
+                    }
                 }
-            }
-            ?>
-                </select>
+                ?>
+            </select>
             <label for="subject"><b>Subject</b></label>
             <input type="text" placeholder="Enter Subject" name="subject" required>
 

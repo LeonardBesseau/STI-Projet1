@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 17.01.2022
+Date: 18.01.2022
 
 Repo projet 1: https://github.com/Insuline13/STI-Projet1
 
@@ -54,6 +54,7 @@ L'un des comptes suivant peut-être utilisé:
 | ---------------- | ---------------- | ------------- |
 | admin@sti.com    | _LmyZ+A4J%ZX,T`t | admin         |
 | ladygaga@sti.com | Pokerf@ce911     | collaborateur |
+| charli@sti.com   | xg!!jR9d-8/.#xe3 | collaborateur |
 
 ![login](figures/login.png)
 
