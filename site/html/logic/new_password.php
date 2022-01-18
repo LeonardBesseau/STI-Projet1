@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     //get user credentials
-    $email = $_POST['email'];
+    $email = $_SESSION['is_admin'] ? $_POST['email'] : $_SESSION['email'];;
     $password = $_POST['pswd'];
 
     if (!empty($password)) {
