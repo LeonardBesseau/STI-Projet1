@@ -14,6 +14,13 @@ include 'navigation.php';
 <body>
 <div class="container">
     <h2 class="title">User management</h2>
+    <?php if (isset($_SESSION['error']) && !empty($_SESSION['error'])) : ?>
+        <div class="alert alert-danger">
+            <?php echo $_SESSION['error'];
+            $_SESSION['error'] = '';
+            ?>
+        </div>
+    <?php endif; ?>
     <a href="add_user.php" class="btn btn-dark">Add user</a>
     <table class="table">
         <thead>
