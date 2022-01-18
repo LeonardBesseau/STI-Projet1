@@ -27,7 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($password)) {
         if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#", $password)) {
             if (isset($file_db)) {
-                $sql = $file_db->prepare("UPDATE users SET password='$password' WHERE email=:email");
+                $sql = $file_db->prepare("UPDATE users SET password=:password WHERE email=:email");
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $sql->bindParam('password', $hash);
                 $sql->bindParam('email', $email);
                 $result = $sql->execute();
             }
