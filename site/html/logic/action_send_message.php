@@ -22,7 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // get variables
     $recipient = $_POST['recipient'];
     $subject = $_POST['subject'];
+    echo $subject;
     $subject = str_replace("'", "''", $subject);
+    echo $subject;
     $body = $_POST['body'];
     $body = str_replace("'", "''", $body);
     date_default_timezone_set('Europe/Zurich');
@@ -32,10 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($file_db)) {
             // query to send users message
             $sql = $file_db->prepare("INSERT INTO messages (subject, body, sender, recipient, date) VALUES (:subject,:body,:sender,:recipient,:date)");
-            $htmlspecialchars = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
-            $sql->bindParam('subject', $htmlspecialchars);
-            $htmlspecialchars = htmlspecialchars($body, ENT_QUOTES, 'UTF-8');
-            $sql->bindParam('body', $htmlspecialchars);
+            $htmlspecialchars1 = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('subject', $htmlspecialchars1);
+            $htmlspecialchars2 = htmlspecialchars($body, ENT_QUOTES, 'UTF-8');
+            $sql->bindParam('body', $htmlspecialchars2);
             $sql->bindParam('sender', $sender);
             $sql->bindParam('recipient', $recipient);
             $sql->bindParam('date', $date);
@@ -43,7 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             //redirect to inbox
             header('Location: ../view/inbox.php');
         } else {
-            echo 'Error: unable to send message';
+            echo 'Error: unable to connect to database';
+            echo '<br/><a href="../view/inbox.php">Return</a>';
         }
     } catch (PDOException $e) {
         // Close file database.sqlite connection
