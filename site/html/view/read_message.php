@@ -5,7 +5,7 @@ include 'navigation.php';
 
 //get variable
 $id = $_POST['id'];
-print($id);
+
 ?>
 
 <!DOCTYPE html>

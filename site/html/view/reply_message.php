@@ -1,6 +1,6 @@
 <?php
-include '../db_connect.php';
 include '../logic/session.php';
+include '../db_connect.php';
 include 'navigation.php';
 
 // get variables

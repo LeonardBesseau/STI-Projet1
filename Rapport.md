@@ -2,7 +2,7 @@
 
 Auteurs: Besseau Léonard et Cerottini Alexandra
 
-Date: 16.01.2022
+Date: 17.01.2022
 
 
 
@@ -28,10 +28,10 @@ Le système a pour objectif de permettre à des employés au sein d'une entrepri
 
 ### Hypothèses de sécurité
 
-- Une personne externe ne peut pas avoir un compte. 
-- Seulement les employés actif de l'entreprise peuvent utiliser l'application web
-- Les administrateurs de la base de données et de l'application sont de confiance.
-- Il est impossible d'usurper l'identité du serveur.
+- Une personne externe ne peut pas avoir un compte
+- Seulement les employés actifs de l'entreprise peuvent utiliser l'application web
+- Les administrateurs de la base de données et de l'application sont de confiance
+- Il est impossible d'usurper l'identité du serveur
 
 
 
@@ -45,11 +45,11 @@ Le système a pour objectif de permettre à des employés au sein d'une entrepri
 
 - Seuls les administrateurs peuvent voir les informations personnelles (mail, validité, rôle) des autres utilisateurs mais ils ne peuvent pas voir leur mot de passe
 
-- Personne ne peut lire et supprimer les messages électroniques qui sont destinés à d'autres personnes.
+- Personne ne peut lire et supprimer les messages électroniques qui sont destinés à d'autres personnes
 
-- Personne ne peut supprimer ou modifier un message après l'avoir envoyé.
+- Personne ne peut supprimer ou modifier un message après l'avoir envoyé
 
-- Personne ne peut envoyer un message électronique au nom d'une autre personne.
+- Personne ne peut envoyer un message électronique au nom d'une autre personne
 
   
 
@@ -61,7 +61,7 @@ Le système a pour objectif de permettre à des employés au sein d'une entrepri
 
 - Base de données des messages électroniques
 
-- Application Web (Server applicatif php + server web NGINX)
+- Application Web (Server applicatif PHP + server web NGINX)
 
   
 
@@ -79,7 +79,7 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
 ### DFD
 
-![DFD](images/DFD.png)
+![DFD](figures/DFD.png)
 
 
 
@@ -93,14 +93,14 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
   - Authenticité + Confidentialité
 
-  Seuls les membres de l’entreprise ont accès à l'application. Une personne externe à l'entreprise pourrait obtenir des informations confidentielles autrement.
+  Seuls les membres de l’entreprise ont accès à l'application. Si ce n'est pas le cas, une personne externe à l'entreprise pourrait obtenir des informations confidentielles.
 
 - La base de données
   - Table users (liste des utilisateurs)
 
     - Confidentialité
 
-    Les données personnelles ne doivent pas être accessibles aux autres utilisateurs. (Sphère privée)
+    Les données personnelles ne doivent pas être accessibles aux autres utilisateurs (sphère privée).
 
     - Intégrité
 
@@ -110,15 +110,15 @@ Les administrateurs ont accès aux mêmes fonctionnalités que les collaborateur
 
     - Confidentialité
 
-    Les messages entre 2 utilisateurs sont censés être confidentiels pour tous les autres utilisateurs
+    Les messages entre 2 utilisateurs sont censés être confidentiels pour tous les autres utilisateurs.
 
     - Intégrité
 
-    Un message ne doit pas être modifié après envoi ou supprimé par l'auteur (non-répudiation)
+    Un message ne doit pas être modifié après envoi ou supprimé par l'auteur (non-répudiation).
 
     - Authenticité
 
-    L'auteur d'un message doit être le véritable auteur (réputation)
+    L'auteur d'un message doit être le véritable auteur (réputation).
 
 L'application web doit seulement être accessible aux collaborateurs et aux administrateurs (sauf la page de login). Les actions des administrateurs sur les utilisateurs sont confidentielles et seulement les administrateurs peuvent les réaliser.
 
@@ -142,7 +142,7 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
 
 - Employés mécontents
   - Motivation: vengeance, curiosité, espionnage industriel
-  - Cible: lire des messages d'autres utilisateurs ou élévation de privilège
+  - Cible: lire des messages d'autres utilisateurs, élévation de privilège, déni de service
   - Potentialité: haute
 - Cybercriminels
   - Motivation: financières
@@ -150,7 +150,7 @@ Si un incident se produit, celui-ci nuirait la réputation de l'application Web 
   - Potentialité: moyenne
 - Concurrents
   - Motivation: espionnage industriel
-  - Cible: lire les messages des utilisateurs, déni de service
+  - Cible: lire les messages des utilisateurs, déni de service, sabotage
   - Potentialité: moyenne
 - Hackers, script-kiddies
   - Motivation: s'amuser, gloire
@@ -177,13 +177,13 @@ Cible: serveur web
 Scénario d'attaque: 
 
 - XSS
-  - Une injection XSS peut être faite dans le sujet ou le corps du message pour rediriger sur une autre page, empêchant ainsi d'utiliser l'application. Selon sur quelle page l'utilisateur est redirigé, une boucle infinie peut être créée. Il suffit à l'attaquant d'envoyer un message à un autre utilisateur (non admin) en mettant dans le sujet du message par exemple: `<script>window.location.href="http://www.localhost:8080/logic/delete_user.php";</script>`. Cela redirigera l'utilisateur allant sur sa boîte mail directement sur la page gérant les utilisateurs mais celle-ci n'est pas accessible à un simple utilisateur donc il sera redirigé sur sa boîte mail, ceci en boucle.
+  - Une injection XSS peut être faite dans le sujet ou le corps du message pour rediriger sur une autre page, empêchant ainsi d'utiliser l'application. Selon sur quelle page l'utilisateur est redirigé, une boucle infinie peut être créée. Il suffit à l'attaquant d'envoyer un message à un autre utilisateur (non admin) en mettant dans le sujet du message par exemple: `<script>window.location.href="http://www.localhost:8080/view/users.php";</script>`. Cela redirigera l'utilisateur allant sur sa boîte mail directement sur la page gérant les utilisateurs mais celle-ci n'est pas accessible à un simple utilisateur donc il sera redirigé sur sa boîte mail, ceci en boucle.
 
 Contrôles: Validation des entrées
 
 #### Scénario 2: Récupération des données internes
 
-Stride: information disclosure, elevation of privilege, tampering
+Stride: information disclosure
 
 Impact: élevé (financier, réputation, données personnelles)
 
@@ -197,50 +197,23 @@ Scénario d'attaque:
 
 - Injection SQL
 
-  - Avec une injection SQL, on peut afficher le premier mail de la base de données. Dans le code HTML de l'inbox, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
+  - Avec une injection SQL, on peut afficher le premier mail de la base de données. En effectuant une requête pour lire un message, l'attaquant connecté sur l'application web peut modifier la value du mail de son choix en y ajoutant une requête SQL par exemple:
 
-    ![image-20220109171551344](figures/image-20220109171551344.png)
+    ![scenario2_sql](figures/scenario2_sql.png)
 
-    Lorsqu'il cliquera sur le bouton *open*, le premier mail de la base de donnée s'affichera alors que celui-ci ne lui était pas destiné. Il faut noter également que les id des messages sont séquentiels.
-
-- CSRF
-
-  - L'attaquant peut construire une attaque CSRF modifiant automatiquement le mot de passe d'un utilisateur par un mot de passe voulu et par exemple envoyer un faux site web à l'utilisateur par mail. Lorsque l'utilisateur se cliquera sur ce site web malicieux, il sera redirigé sur le site web vulnérable et son mot de passe aura été modifié sans qu'il s'en aperçoive. L'attaquant pourra ensuite se connecter sur le compte de l'admin et accéder aux données de celui-ci.
-
-    ```php+HTML
-    <form action="../logic/new_password.php" method="post">
-            <div class="form_container">
-                <label for="email"><b>Email</b></label>
-                <input type="text" name="email" readonly class="form-control" value="<?= $_SESSION['email'] ?>" " >
-    
-                <label for="psw"><b>New password</b></label>
-                <input type="password" placeholder="Enter new password" name="pswd" required>
-                <button type="submit">Change</button>
-            </div>
-        </form>
-    ```
-
-    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/password.php`. Il faut aussi y insérer l’émail de l'utilisateur à qui l'on veut modifier le mot de passe. Il faut également ajouter un champ `value` et y mettre le mot de passe que l'on souhaite. À la fin, il faut y insérer une balise script contenant:
-
-    ```php+HTML
-    <script>document.forms[0].submit();<\script>
-    ```
-
-    Lorsque l'utilisateur ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
+    Le résultat sera le premier mail de la base de donnée alors qu'il est possible que celui-ci ne lui était pas destiné. Il faut noter également que les id des messages sont séquentiels.
 
 - Accès arbitraire aux données
 
   - Il est possible d'accéder à n'importe quel message sans restriction d'accès, même si le message ne nous est pas destiné. Les id des messages étant séquentiels, on peut tous les obtenir rapidement.
 
-    ![image-20220109130818911](figures/image-20220109130818911.png)
+    ![scenario2_data](figures/scenario2_data.png)
 
 
 Contrôles: 
 
 - Validation des entrées
 - Contrôle des accès
-- Token anti-CSRF
-- Vérifier que l'action est effectuée sur un message appartenant à l'utilisateur
 
 #### Scénario 3: Suppression des données
 
@@ -260,19 +233,19 @@ Scénario d'attaque:
 
   - Avec une injection SQL, on peut supprimer tous les mails de la base de données. Pour ce faire, l'attaquant connecté sur l'application web peut modifier la requête de suppression d'un mail de son choix en y ajoutant une requête SQL par exemple:
 
-    ![image-20220109174352288](figures/image-20220109174352288.png)
+    ![scenario3_sql](figures/scenario3_sql.png)
 
-    Lorsqu'il cliquera sur le bouton *delete*, tous les mails seront supprimés.
+    Lorsqu'il effectuera la requête, tous les mails seront supprimés.
 
 - Autorisation bypass
 
-  - Un attaquant pourrait utiliser les techniques décrites dans vol de session pour obtenir une autre session et ensuite supprimer les messages.
+  - Un attaquant pourrait utiliser les techniques décrites dans **Vol de session/Compte** pour obtenir une autre session et ensuite supprimer les messages.
 
 - Envoi d'une requête non-authentifié
 
   - N'importe qui (même une personne non-connectée) sur l'application web peut supprimer n'importe quel message de la base de donnée en effectuant la requête directement.
 
-    ![image-20220109130943771](figures/image-20220109130943771.png)
+    ![scenario3_data](figures/scenario3_data.png)
 
 Contrôles: 
 
@@ -286,9 +259,9 @@ Stride: repudiation, tampering, elevation of privileges
 
 Impact: élevé (financier, données personnelles)
 
-Source de la menace: employé mécontent
+Source de la menace: employé mécontent, hacker, concurrent
 
-Motivation: supprimer des informations
+Motivation: modifier des informations, défi, sabotage
 
 Cible: base de données
 
@@ -296,35 +269,38 @@ Scénario d'attaque:
 
 - Injection SQL
 
-  - Avec une injection SQL, il est possible de modifier les mots de passes de toute la base de données. Il suffit d'effectuer la requête pour modifier un mot de passe avec une injection dans le nom d'utilisateur pour changer les mot de passe. Par exemple:
+  - Avec une injection SQL, il est possible de modifier les mots de passe de toute la base de données. Il suffit d'effectuer la requête pour modifier un mot de passe avec une injection dans le nom d'utilisateur pour changer les mots de passe. Par exemple:
 
-    ![image-20220109182544109](figures/image-20220109182544109.png)
+    ![scenario4_sql](figures/scenario4_sql.png)
 
-    Nous pouvons voir sur *phpliteadmin* que tous les utilisateurs ont les mêmes mots de passes
+    Nous pouvons voir sur *phpliteadmin* que tous les utilisateurs ont les mêmes mots de passe
 
-    ![image-20220109182643042](figures/image-20220109182643042.png)
+    ![scenario4_db](figures/scenario4_db.png)
 
     L'attaquant peut donc accéder à tous les comptes.
 
 - CSRF
 
-  - Un attaquant peut forcer l'administrateur à changer son mot de passe. Voir le point **Récupération de données internes**  
+  - L'attaquant peut construire une attaque CSRF modifiant automatiquement le mot de passe d'un utilisateur par un mot de passe voulu et par exemple envoyer un faux site web à l'utilisateur par mail. Lorsque l'utilisateur cliquera sur ce site web malicieux, une requête vers le site vulnérable sera effectuée et son mot de passe aura été modifié sans qu'il s'en aperçoive. L'attaquant pourra ensuite se connecter sur le compte de l'admin et accéder aux données de celui-ci.
+
+    Il faudrait faire une requête POST avec l'email de la cible et le mot de passe voulu vers `logic/new_password.php`. Ceci peut être effectué sur le site malicieux en créant un formulaire invisible et en le soumettant automatiquement dès que la page est chargée.
 
 - Autorisation bypass
 
-  - Un attaquant pourrait utiliser les techniques décrites dans vol de session pour obtenir une autre session et ensuite supprimer les messages.
+  - Un attaquant pourrait utiliser les techniques décrites dans **Vol de session/Compte** pour obtenir une autre session et ensuite supprimer les messages.
 
 - Modification du mot de passe d'un autre utilisateur
 
   - Un attaquant peut modifier le mot de passe d'un utilisateur arbitraire. Pour ce faire, il lui suffit de modifier l'email et de choisir le mot de passe qu'il veut. Par exemple:
 
-    ![image-20220109183937269](figures/image-20220109183937269.png)
+    ![scenario4_data](figures/scenario4_data.png)
 
 
 Contrôles: 
 
 - Validation des entrées
 - Contrôle des accès
+- Token anti-CSRF
 
 #### Scénario 5: Deviner un mot de passe
 
@@ -370,7 +346,7 @@ Scénario d'attaque:
 
   - Les informations transitent en clair sur le réseau donc lorsqu'un utilisateur se connecte à son compte, une autre personne se trouvant sur le même réseau peut sniffer le trafic et récupérer les credentials de cet utilisateur.
 
-    ![image-20220109125112329](figures/image-20220109125112329.png)
+    ![Wireshark](figures/wireshark.png)
 
 
 Contrôles: 
@@ -387,7 +363,7 @@ Source de la menace: employé mécontent, hacker, cybercriminel, concurrent
 
 Motivation: usurpation d'identité, lire messages de quelqu'un d'autre, avoir accès aux fonctionnalités des administrateurs, défi, accès à l'application
 
-Cible: cookie de session
+Cible: cookie de session, login
 
 Scénario d'attaque: 
 
@@ -398,28 +374,29 @@ Scénario d'attaque:
 
   - Grâce à [Requestbin](https://requestbin.net/) (un site nous permettant de récupérer des requêtes), un attaquant peut voler le cookie de session de l'admin. Pour ce faire, il lui suffit d'envoyer un mail contenant une attaque XSS à l'admin (l'attaque peut être réalisé dans le subject ou dans le message).
 
-    <img src="figures/image-20220109115433349.png" alt="image-20220109115433349" style="zoom: 67%;" />
+    <img src="figures/envoi.png" alt="envoi" style="zoom: 67%;" />
 
     Lorsque l'admin ouvrira le message il ne verra rien d'anormal mais l'attaque XSS aura été réalisée.
 
-    <img src="figures/image-20220109115844446.png" alt="image-20220109115844446" style="zoom:67%;" />
+    <img src="figures/reception.png" alt="reception" style="zoom:67%;" />
 
     Sur RequestBin, l'attaquant peut récupérer le cookie de session de l'admin.
 
-    <img src="figures/image-20220108234312574.png" alt="image-20220108234312574" style="zoom:67%;" />
+    <img src="figures/requestBin.png" alt="requestBin" style="zoom:67%;" />
 
 
 Il peut ensuite remplacer son propre cookie de session par le cookie de session de l'admin. Il aura réussi à prendre possession du compte de l'administrateur.
 
 - Attaque CSRF
-  - Voir le point **Récupération de données internes** 
+  - Voir le point **Modification des données** 
 - Vol de token
-  - Comme la communication n'utilise pas HTTPS, il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple comme décrit dans le scénario 6.
+  - Comme la communication n'utilise pas HTTPS, il suffit de récupérer des credentials ou un cookie de session avec wireshark par exemple comme dans le point **Vol de mot de passe**.
 
 Contrôles: 
 
 - Validation des entrées
 - Token anti-CSRF
+- Utiliser HTTPS pour sécuriser les connexions
 
 #### Scénario 8: Élévation de privilège
 
@@ -427,9 +404,9 @@ Stride: tampering, repudiation, elevation of privileges
 
 Impact: faible (données personnelles, réputation)
 
-Source de la menace: employé mécontent
+Source de la menace: employé mécontent, hacker
 
-Motivation: avoir accès aux fonctionnalités des administrateurs
+Motivation: avoir accès aux fonctionnalités des administrateurs, défi
 
 Cible: formulaire
 
@@ -437,41 +414,7 @@ Scénario d'attaque:
 
 - Attaque CSRF
 
-  - L'attaquant pourrait, grâce à une attaque CSRF, forcer l'admin à modifier le rôle de l'attaquant pour le faire passer de collaborateur à administrateur. L'attaquant peut construire une page web contant l'HTML avec le formulaire pour modifier un membre et l'envoyer par email à l'administrateur
-
-    ```php+HTML
-    <form action="../logic/modify_user.php" method="post">
-            <div class="form_container">
-                <label for="email"><b>Email</b></label>
-                <input type="text" name="email" readonly class="form-control" value="<?= $value ?>" " >
-    
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="pswd">
-    
-                <label for="active"><b>Active?</b></label>
-                <select name="active">
-                    <option value="1">Yes</option>
-                    <option value="0" selected>No</option>
-                </select>
-    
-                <label for="admin"><b>Admin?</b></label>
-                <select name="admin">
-                    <option value="1">Yes</option>
-                    <option value="0" selected>No</option>
-                </select>
-    
-                <button type="submit">Ok</button>
-            </div>
-        </form>
-    ```
-
-    Dans ce formulaire, il faudrait modifier les différentes informations en commençant par modifier l'url de l'action et en y mettant `http://localhost:8080/view/edit_user.php?email=test1@test.com`. Il faut aussi y insérer l’émail de l'employé à qui l'on veut élever les privilèges (ici test1@test.com). Il faut également modifier les options sélectionnées pour les paramètres "active" et "admin". À la fin, il faut y insérer une balise script contenant:
-
-    ```php+HTML
-    <script>document.forms[0].submit();<\script>
-    ```
-
-    Lorsque l'admin ira sur cette page web, une requête HTTP sera automatiquement envoyée à l'application web vulnérable.
+  - Voir le point **Modification des données** 
 
 Contrôles:
 
@@ -479,13 +422,13 @@ Contrôles:
 
 #### Scénario 9: Intrusion dans la base de données
 
-Stride: spoofing
+Stride: spoofing, information disclosure
 
 Impact: moyen (perte de confidentialité et d'intégrité)
 
 Source de la menace: employé mécontent, hacker, cybercriminel, concurrent 
 
-Motivation: avoir accès à tout
+Motivation: accéder aux données
 
 Cible: base de données
 
@@ -522,37 +465,45 @@ Il a été ajouté dans les fichiers `modify_user.php`, `new_password.php` et `n
 
 
 
-### Limiter le nombre de tentatives de login
+### Ralentir le bruteforce pour les logins
 
-A FAIRE
+Concerne: scénario 5
+
+En plus de la politique de mot de passe, nous avons décider d'ajouter un CAPTCHA afin d'empêcher (ralentir très fortement) le test par brute-force des mots de passe. Ainsi, il est impraticable d'essayer de brute-forcer les mots de passe de cette manière.
+
+Pour ce faire, la solution clé en main de [reCAPTCHA](https://www.google.com/recaptcha/about/) de Google a été utilisée.
 
 
 
 ### Identifiants de sessions 
 
-???? maybe avec session_regenerate_id()
+strict mode
+
+
+
+### HTTPONLY
 
 
 
 ### Hachage de mots de passe
 
+Afin de garantir la sécurité même en cas de hack, nous avons décider de hacher les mots de passe.
+
+Pour ce faire, nous avons utilisé la fonction `password_hash(string $password, string|int|null $algo)` avec l'algorithme bcrypt.
+
 
 
 ### Mot de passe de la base de donnée fort
 
-A FAIRE
+Concerne: scénario 9
 
-
-
-### CAPTCHA
-
-Limiter la vitesse du bruteforce donc c'est trop long et les attaquants vont abandonner.
+Afin de renforcer l'interface administrateur nous avons modifié le mot de passe de la base de donnée dans le fichier `phpliteadmin.php` afin qu'il respecte une politique de sécurité plus élevée.
 
 
 
 ### Protection CSRF
 
-Concerne: scénarios 2, 4, 7, 8
+Concerne: scénarios 4, 7, 8
 
 Un token anti-csrf est généré lors de la création de la session. Ce token est envoyé avec chaque formulaire et est validé par le serveur.
 
@@ -594,10 +545,7 @@ Les éléments contrôlables par les utilisateurs (message, sujet, nom d'utilisa
 Par exemple:
 
 ```php
-            $htmlspecialchars = htmlspecialchars($subject, ENT_QUOTES, 'UTF-8');
-            $sql->bindParam('subject', $htmlspecialchars);
-            $htmlspecialchars = htmlspecialchars($body, ENT_QUOTES, 'UTF-8');
-            $sql->bindParam('body', $htmlspecialchars);
+            $secureData = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 ```
 
 Ce code a été ajouté dans les fichiers `send_messages.php` et `new_user.php`.
@@ -627,7 +575,7 @@ Ce code a été ajouté dans les fichiers `inbox.php`, `read_message.php`, `dele
 
 :warning: Pas réalisé
 
-Il faudrait mettre à jour les différents logiciels.
+Il faudrait mettre à jour les différents logiciels (nginx, jquery, php). NGINX dans notre projet possède la version 1.4.6 et PHP possède la version 5.5.9. Des failles existent sur ces versions.
 
 ### HTTPS
 
@@ -641,49 +589,8 @@ Il faudrait que l'application web soit uniquement utilisable en HTTPS. Pour ce f
 
 ## Conclusion
 
-Pour conclure, grâce à l'analyse de menaces, notre application est maintenant plus sécurisée. Beaucoup de vulnérabilités ont été identifiées et des contre-mesures ont été ajoutées pour qu'elles ne se produisent plus. Il reste encore à mettre le site en HTTPS pour une sécurité optimale. 
+Pour conclure, grâce à l'analyse de menaces, notre application est maintenant plus sécurisée. Beaucoup de vulnérabilités ont été identifiées et des contre-mesures ont été ajoutées pour qu'elles ne se produisent plus. Il reste encore à mettre le site en HTTPS pour une sécurité optimale ainsi que mettre à jour les différentes versions des logiciels utilisés.
 
-Les analyses de menaces devraient être réalisées à chaque création d'une nouvelle application. Elles permettent vraiment de se rendre compte des vulnérabilités.
+Grâce à ce projet, nous nous rendons compte que les analyses de menaces devraient être réalisées à chaque création d'une nouvelle application. Elles permettent vraiment de se rendre compte des vulnérabilités.
 
-Ce travail nous a permis d'acquérir des réflexes en matière de sécurité ainsi que de tester des scénarios d'attaques.
-
-
-
-
-
-
-
-
-
-
-
-Notes de Léonard:
-
-
-
-password trop faible
-
-On est admin et on peut lire les messages d'autre utilisateurs car les ID sont seuqentiel et qu'il n'y a pas de controle d'accès. (on va garder les id séquentiel mais on doit verif que c'est la bonne personne qui accède. On va faire un fetch et vérifier qui y accède et on retournera un forbidden)
-
-XSS
-
-perte de confidentialité
-
-
-
-
-
-Utilisateur peut faire une XSS avec un nouveau message, on peut lire n'importe quel message même si il ne nous est pas adressé, 
-
-à tester: 
-
-- Est-ce qu'on peut supprimer les tables? 
-- Est-ce qu'on est capable de changer nos droits?
-- tester si y'a des vulnérabilités dans la version du PHP
-- Utiliser du HTTPS pour sécuriser les connexions.
-
-
-
-On peut faire une injection XSS sur le body mais également dans le subject. L'avantage de le faire dans le subject, c'est que l'utilisateur a juste besoin de se connecter et l'attaque aura lieu immédiatement alors que dans le body l'utilisateur doit ouvrir le message.
-
-On peut supprimer tous les messages d'autres personnes. On peut injecter pour supprimer tous les messages
+Ce projet nous a permis d'acquérir des réflexes en matière de sécurité ainsi que de tester des scénarios d'attaques tout en corrigeant les failles qui ont pu être exploitée par la suite. La principale difficulté rencontrée a été l'établissement du DFD. En effet, il était difficile de comprendre ce qui était réellement attendu le concernant.
