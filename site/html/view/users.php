@@ -38,7 +38,7 @@ include 'navigation.php';
                 <td><?= $email['is_activ'] ? "active" : "inactive" ?></td>
                 <td><?= $email['is_admin'] ? "admin" : "collaborator" ?></td>
                 <td><a href="edit_user.php?email=<?php echo $email['email']; ?>">Edit</a></td>
-                <td><a href="../logic/delete_user.php?email=<?php echo $email['email']; ?>">Delete</a></td>
+                <td><a href="../logic/delete_user.php?email=<?php echo $email['email']; ?>&token=<?php echo $_SESSION['token']; ?>">Delete</a></td>
             </tr>
             <?php
         }
