@@ -23,9 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // get variables
     $recipient = $_POST['recipient'];
     $subject = $_POST['subject'];
-    $subject = str_replace("'", "''", $subject);
     $body = $_POST['body'];
-    $body = str_replace("'", "''", $body);
     date_default_timezone_set('Europe/Zurich');
     $date = date('d/m/Y h:i:s', time());
 
